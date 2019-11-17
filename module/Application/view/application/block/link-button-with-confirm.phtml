@@ -1,0 +1,56 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$color = $viewModel->getVariable('color', 'default');
+$size = $viewModel->getVariable('size');
+if ($size !== null) {
+    $size = "btn-$size";
+}
+$href = '#';
+$routeName = $viewModel->getVariable('routeName');
+if ($routeName !== null) {
+    $routeParams = $viewModel->getVariable('routeParams', []);
+    $href = $this->url($routeName, $routeParams);
+}
+$target = $viewModel->getVariable('target');
+$icon = $viewModel->getVariable('icon');
+$buttonText = $viewModel->getVariable('buttonText', 'Default');
+$elementId = 'form-element-' . str_replace(' ', '-', strtolower($buttonText));
+
+$modalTitle = $viewModel->getVariable('modalTitle', 'Confirm');
+$modalText = $viewModel->getVariable('modalText', 'Confirm ?');
+
+$aclName = $viewModel->getVariable('aclName');
+$aclAction = $viewModel->getVariable('aclAction', null);
+?>
+
+<?php if (!$aclName || ($aclName /*&& Acl::IsAllowed($aclName, $aclAction)*/)):?>
+    <a class="btn btn-<?= $color ?> <?= $size ?>" id="<?= $elementId ?>"
+       href="#modal-<?=$viewModel->getVariable('id')?>"
+       target="_self"
+       data-toggle="modal">
+        <?php if ($icon !== null): ?>
+            <i class="fa <?= $icon ?>"></i>
+        <?php endif; ?>
+        <?= $buttonText ?>
+    </a>
+
+    <div class="modal fade bs-modal-sm" id="modal-<?=$viewModel->getVariable('id')?>" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title"><?= $modalTitle ?></h4>
+                </div>
+                <div class="modal-body"><?= $modalText ?></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                    <a class="btn btn-<?= $color ?>"
+                       href="<?= $href ?>"
+                       target="_self"><?= $buttonText ?>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

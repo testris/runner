@@ -1,0 +1,101 @@
+<?php
+
+$this->headScript()->appendFile('/js/cases-run.js');
+
+/** @var TestCase\ViewModel\CasesTreeViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$tree = $viewModel->getSectionTree();
+
+$values = $viewModel->getVariable('value');
+
+if (is_null($values)) {
+    $values = [];
+}
+
+if ($values && !is_array($values)) {
+    $values = json_decode($values, JSON_OBJECT_AS_ARRAY);
+}
+
+function renderNode($node, \TestCase\ViewModel\CasesTreeViewModel $viewModel, $values, $siteId = null) {
+    $nodeOutput = '
+    <div class="node">
+        <div class="node-title long-line" style="margin-right: 20px;">
+            <span class="node__arrow block__arrow"><span class="angle fa fa-angle-down fa-fw fa-lg"></span></span>
+            <div class="node__name">%s</div>
+        </div>
+        <label style="position: absolute;top: 4px;right: 0;">
+            <input type="checkbox" data-case="%3$s" data-case-child="%4$s">
+        </label>
+        <div class="node-children" style="display: none;">%s</div>
+    </div>';
+
+    $output = '';
+    foreach ($node as $item) {
+
+        if (isset($item['siteId'])) {
+            $siteId = $item['siteId'];
+        }
+
+        if (isset($item['children'])) {
+            $children = renderNode($item['children'], $viewModel, $values, $siteId);
+        } else {
+            $children = '';
+        }
+
+        $cases = $viewModel->getCasesBySectionId($item['id'], $siteId);
+
+        foreach ($cases as $case) {
+            $children .= renderCase($case, $values);
+        }
+
+        $output .= sprintf(
+            $nodeOutput,
+            $item['name'], // 1
+            $children, // 2
+            isset($item['siteId']) ? $item['siteId'] + 10000 : $item['id'], // 3
+            $item['parentId'] // 4
+        );
+    }
+
+    return $output;
+}
+
+function renderCase(\TestCase\Entity\TestCase $case, $values) {
+    $output = '
+<div style="position: relative;">
+    <a class="node node__leaf case-node" href="javascript:;">
+        <div class="node-title" data-id="%1$s" style="margin-right: 20px;">
+            <div class="node__order">#%1$s</div>
+            <div class="node__name">%2$s</div>
+            <div style="display:none;" class="node__steps" 
+                data-preconditions="%3$s"
+                data-steps="%4$s"
+                data-result="%5$s">
+            </div>
+        </div>
+    </a>
+    <label style="position: absolute;top: 4px;right: 0;">
+        <input type="checkbox" data-case-child="%6$s" %7$s name="caseIds[]" value="%1$s">
+    </label>
+</div>';
+
+    return sprintf(
+        $output,
+        $case->getId(), //1
+        htmlspecialchars($case->getTitle()), //2
+        htmlspecialchars($case->getPreconditions()), //3
+        htmlspecialchars($case->getSteps()), //4
+        htmlspecialchars($case->getResult()), //5
+        $case->getSectionId(), //6
+        (in_array($case->getId(), $values)) ? 'checked="checked"' : '' //7
+    );
+}
+?>
+
+<div class="tree__content">
+    <div class="tree">
+        <div class="tree__content">
+            <?=renderNode($tree, $viewModel, $values)?>
+        </div>
+    </div>
+</div>

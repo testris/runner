@@ -1,0 +1,45 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$tdViews = $viewModel->getChildrenByCaptureTo('table-td');
+$trCollapseViews = $viewModel->getChildrenByCaptureTo('table-tr-collapse');
+?>
+
+<tr><?php foreach ($tdViews as $view) echo $this->render($view) ?></tr>
+<?php foreach ($trCollapseViews as $view): ?>
+
+    <?php if ($view->getVariable('values')): ?>
+        <tr class="tr-collapse">
+            <td colspan="100" width="100%" style="margin: 0; padding: 0">
+                <div class="collapse" id="<?= $view->getVariable('target') ?>">
+                    <div class="well">
+                        <?php foreach ($view->getVariable('values') as $value): ?>
+                            <label style="font-weight: bold"><?= ($view->getVariable('labels')[$value]) ?>:</label>
+                            <?php if (!empty($view->getVariable('jsonPrettyPrint')[$value])): ?>
+                                <pre><?= json_encode(json_decode($view->getVariable($value)), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) ?></pre>
+                            <?php else: ?>
+                                <div><?= $view->getVariable($value) ?></div>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    <?php else: ?>
+        <tr class="tr-collapse">
+            <td colspan="100" width="100%" style="margin: 0; padding: 0">
+                <div class="collapse" id="<?= $view->getVariable('target') ?>">
+                    <div class="well">
+                        <?php if (!empty($view->getVariable('jsonPrettyPrint'))): ?>
+                            <pre><?= json_encode(json_decode($view->getVariable('value')), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) ?></pre>
+                        <?php else: ?>
+                            <div><?= $view->getVariable('value')?></div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    <?php endif; ?>
+
+<?php endforeach; ?>
+

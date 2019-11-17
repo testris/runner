@@ -1,0 +1,96 @@
+<?php
+$this->headLink()->appendStylesheet('/plugins/morris/morris.css');
+$this->headScript()->appendFile('/plugins/morris/morris.min.js');
+$this->headScript()->appendFile('/plugins/morris/raphael-min.js');
+$this->headScript()->appendFile('/js/dashboard.js');
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+?>
+<div class="page-content dashboard">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 col-sm-4">
+                <?=$this->{'high-block'}?>
+            </div>
+            <div class="col-md-4 col-sm-4">
+                <?=$this->{'mid-block'}?>
+            </div>
+            <div class="col-md-4 col-sm-4">
+                <?=$this->{'low-block'}?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-sm-6">
+                <div class="portlet light ">
+                    <div class="portlet-title">
+                        <div class="caption caption-md">
+                            <i class="icon-bar-chart font-green"></i>
+                            <span class="caption-subject font-green">Run statistic</span>
+                            <span class="caption-helper hide">weekly stats...</span>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div id="run_statistics" class="portlet-body-morris-fit morris-chart" style="height: 336px"> </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">
+                <!-- BEGIN PORTLET-->
+                <div class="portlet box red ">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-bomb"></i> Risky tests
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="scroller" style="height: 342px;" data-always-visible="1" data-rail-visible="0">
+                            <ul class="feeds">
+                                <li>
+                                    <div class="col1">
+                                        <div class="cont">
+                                            <div class="cont-col1">
+                                                <div class="label label-sm label-danger">#28</div>
+                                            </div>
+                                            <div class="cont-col2">
+                                                <div class="desc">
+                                                    Оплата Ордера Paypalом<br/>
+                                                    <small class="text-info">BestessaysCom\OrderForm\OrderPayByPayPalCest</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col2">
+                                        <div class="date tooltips" data-container="body" data-placement="left" data-original-title="success rate for last 10 run">80%</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="col1">
+                                        <div class="cont">
+                                            <div class="cont-col1">
+                                                <div class="label label-sm label-danger">#10</div>
+                                            </div>
+                                            <div class="cont-col2">
+                                                <div class="desc">
+                                                    Пустой ресабмит на оплаченном ордере<br/>
+                                                    <small class="text-info">BestessaysCom\OrderForm\Resubmit\EmptyResubmitOnPaidOrderCest</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col2">
+                                        <div class="date tooltips" data-container="body" data-placement="left" data-original-title="success rate for last 10 run">40%</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-sm-6">
+                <?=$this->{'sites-tests'}?>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,68 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+
+$name = $viewModel->getVariable('name');
+$runLink = $viewModel->getVariable('runLink');
+
+?>
+<div class="middle" style="-ms-text-size-adjust: 100%; -webkit-font-smoothing: subpixel-antialiased; -webkit-text-size-adjust: 100%; background-color: #f4f4f4; margin: 0 10px; table-layout: fixed; text-align: center;">
+    <!--[if (gte mso 9)|(IE)]>
+    <table width="600" align="center">
+        <tr>
+            <td>
+    <![endif]-->
+    <table class="outer" cellpadding="0" align="center" style="background-color: #ffffff; border-collapse: collapse; border-radius: 4px; margin: 1rem auto; max-width: 600px; overflow: hidden; width: 100%;">
+        <tbody><tr>
+            <td style="-webkit-font-smoothing: subpixel-antialiased;">
+                <h1 style="text-align: center; color: #1d3f66; font-size: 30px; font-weight: 300; line-height: 45px"><strong>Congratulations! Test is passed :)</strong></h1>
+            </td>
+        </tr>
+        <tr>
+            <td class="one-column content" style="-webkit-font-smoothing: subpixel-antialiased; font-size: 0; padding: 0 0 0 0; text-align: center;">
+                <div class="column" style="-webkit-font-smoothing: subpixel-antialiased; display: inline-block; font-size: 14px; max-width: 600px; text-align: left; vertical-align: top; width: 100%;">
+                    <table width="100%" cellpadding="10" style="background-color: transparent; border-collapse: collapse; max-width: 600px;">
+                        <tbody><tr>
+                            <td style="-webkit-font-smoothing: subpixel-antialiased; padding: 0px 10px 10px;">
+                                <div style="-webkit-font-smoothing: subpixel-antialiased; color: #3a4551; padding: 20px;">
+                                    <table width="100%" style="background-color: transparent; border-collapse: collapse;">
+                                        <tbody>
+                                        <tr>
+                                            <td align="center" style="-webkit-font-smoothing: subpixel-antialiased;">Please, check <span style="color: #5997eb"><?= $name ?></span>
+                                                result page.
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="-webkit-font-smoothing: subpixel-antialiased;">
+                                <div style="-webkit-font-smoothing: subpixel-antialiased; text-align: center;">
+                                    <table class="button" style="background-color: transparent; border-collapse: collapse; margin: auto; width: auto !important;">
+                                        <tbody>
+                                        <tr>
+                                            <td class="button-inner" style="-webkit-font-smoothing: subpixel-antialiased; padding: 0 0 30px;">
+                                                <a class="button-link" href="<?= $runLink ?>" target="_blank" style="background-color: #5bf9b5; border: #68ea97 1px solid; border-radius: 3px; color: #ffffff !important; display: inline-block; font-family: helvetica; font-size: 20px; font-weight: bold; padding: 12px 55px; text-decoration: none;">
+                                                    <span style="color: #ffffff;">See result</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        </tbody></table>
+    <!--[if (gte mso 9)|(IE)]>
+    </td>
+    </tr>
+    </table>
+    <![endif]-->
+</div>

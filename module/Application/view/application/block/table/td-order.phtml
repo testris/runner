@@ -1,0 +1,23 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$class = $viewModel->getVariable('class');
+$target = $viewModel->getVariable('target', '_blank');
+
+$filterRouteName = $viewModel->getVariable('filterRouteName');
+$routeName = $viewModel->getVariable('orderEditRouteName');
+$href = '#';
+
+if ($routeName !== null) {
+    $routeParams = $viewModel->getVariable('routeParams', []);
+    $routeParams = array_merge($routeParams, ['id' => $viewModel->getVariable('value')]);
+    $href = $this->url($routeName, $routeParams);
+}
+?>
+
+<td>
+    <a href="<?=$this->url($filterRouteName, [], ['query' => ['orderId_equalTo' => $viewModel->getVariable('value')]])?>">
+        <i class="fa fa-search"></i>
+    </a>
+    <a target="<?= $target ?>" href="<?= $href ?>" class="<?= $class ?>">8<?= $viewModel->getVariable('value') ?>
+</td>

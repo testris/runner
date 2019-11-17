@@ -1,0 +1,34 @@
+<div class="form-group">
+    <div class="col-md-6">
+        <!-- BEGIN Portlet PORTLET-->
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption"><i class="fa fa-list"></i>Cases</div>
+                <div class="tools">
+                    <label>
+                        <input type="checkbox" id="all-cases-checkbox">
+                    </label>
+                </div>
+            </div>
+            <div class="portlet-body cases-list">
+                <?= $this->sections?>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 left-separator">
+        <!-- BEGIN Portlet PORTLET-->
+        <div class="portlet" id="case-wrapper" style="display: none;">
+            <div class="portlet-title">
+                <div class="caption" id="case-title"></div>
+            </div>
+            <div class="portlet-body">
+                <h4>Предусловия</h4>
+                <ol id="case-preconditions"></ol>
+                <h4>Шаги</h4>
+                <ol id="case-steps"></ol>
+                <h4>Результат</h4>
+                <ol id="case-result"></ol>
+            </div>
+        </div>
+    </div>
+</div>

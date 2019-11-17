@@ -1,0 +1,63 @@
+<?php
+/** @var \UseCase\ViewModel\BlockViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$title = $viewModel->getVariable('title');
+$portletColor = $viewModel->getVariable('portlet-color');
+$labelColor = $viewModel->getVariable('label-color');
+$casesBySections = $viewModel->getVariable('cases');
+
+?>
+<div class="portlet box <?=$portletColor?> ">
+    <div class="portlet-title">
+        <div class="caption">
+            <?=$title?>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="scroller" style="height: 620px;" data-always-visible="1" data-rail-visible="0">
+            <ul class="feeds">
+                <?php foreach ($casesBySections as $sectionId=>$cases): ?>
+                    <li>
+                        <div class="col1">
+                            <div class="cont">
+                                <div class="cont-col1">
+                                    <div class="desc">
+                                        <i class="fa fa-genderless"></i> <?=$cases['path']?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <?php if (strpos($cases['path'], 'Essay') !== false) $sitesCount = 12;?>
+                    <?php if (strpos($cases['path'], 'Resume') !== false) $sitesCount = 1;?>
+                    <?php if (strpos($cases['path'], 'Writer') !== false) $sitesCount = 1;?>
+                    <?php foreach ($cases['cases'] as $case): ?>
+                        <li>
+                            <div class="col1">
+                                <div class="cont">
+                                    <div class="cont-col1">
+                                        <div class="label label-sm <?=$labelColor?>">#<?=$case['id']?></div>
+                                    </div>
+                                    <div class="cont-col2">
+                                        <div class="desc">
+                                            <?=$case['title']?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col2">
+                                <div class="date popovers"
+                                     data-container="body"
+                                     onclick=" "
+                                     data-html="true"
+                                     data-trigger="hover"
+                                     data-placement="left"
+                                     data-content="<?=implode('<br/>', $viewModel->getSitesForCase($case['id']));?>"><?=count($viewModel->getSitesForCase($case['id']))?>/<?=$sitesCount?></div>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+</div>

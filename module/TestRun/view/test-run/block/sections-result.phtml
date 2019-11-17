@@ -1,0 +1,139 @@
+<?php
+
+$this->headScript()->appendFile('/js/cases-run.js');
+
+/** @var \TestRun\ViewModel\CasesTreeViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$tree = $viewModel->getSectionTree();
+
+/** @var \TestRun\Entity\TestRun $testRun */
+$testRun = $viewModel->getVariable('result');
+
+function renderNode(
+        $node,
+        \TestRun\ViewModel\CasesTreeViewModel $viewModel,
+        $values,
+        $siteId = null
+) {
+    $nodeOutput = '
+    <div class="node">
+        <div class="node-title long-line" style="margin-right: 20px;">
+            <span class="node__arrow block__arrow"><span class="angle fa fa-angle-down fa-fw fa-lg"></span></span>
+            <div class="node__name">%s</div>
+            <div class="tree__strut">&nbsp;</div>
+        </div>
+        <div class="node-children" style="display: block;">%s</div>
+    </div>';
+
+    $output = '';
+    foreach ($node as $item) {
+        if (isset($item['siteId'])) {
+            $siteId = $item['siteId'];
+        }
+
+        if (isset($item['children'])) {
+            $children = renderNode($item['children'], $viewModel, $values, $siteId);
+        } else {
+            $children = '';
+        }
+
+        $cases = $viewModel->getCasesBySectionId($item['id'], $siteId);
+
+        foreach ($cases as $case) {
+            if(in_array($case->getId(),$values)) {
+                $children .= renderCase($case, $viewModel);
+            }
+        }
+
+        if($children) {
+            $output .= sprintf($nodeOutput, $item['name'], $children, $item['id'], $item['parentId']);
+        }
+    }
+
+    return $output;
+}
+
+function renderCase(
+        \TestCase\Entity\TestCase $case,
+        \TestRun\ViewModel\CasesTreeViewModel $viewModel
+) {
+    /** @var \TestResult\Entity\TestResult $result */
+    $result = $viewModel->getCaseResult($case->getId());
+
+    if (!$result) {
+        return '';
+    }
+
+    $failedSpan = '<span class="fa fa-times-circle fa-fw text_status_failed fa-lg" data-tooltip="Failed"></span>';
+    $passedSpan = '<span class="fa fa-check-circle fa-fw text_status_passed fa-lg" data-tooltip="Passed"></span>';
+    $brokenSpan = '<span class="fa fa-exclamation-circle fa-fw text_status_broken fa-lg" data-tooltip="Broken"></span>';
+    $unknownSpan = '<span class="fa fa-question-circle fa-fw text_status_unknown fa-lg" data-tooltip="Unknown"></span>';
+
+    if($result instanceof \TestResult\Entity\TestResult) {
+        switch ($result->getStatus()) {
+            case \TestResult\Entity\TestResultStatuses::FAILED:
+                $iconSpan = $failedSpan;
+                break;
+
+            case \TestResult\Entity\TestResultStatuses::PASSED:
+                $iconSpan = $passedSpan;
+                break;
+
+            case \TestResult\Entity\TestResultStatuses::BROKEN:
+                $iconSpan = $brokenSpan;
+                break;
+
+            case \TestResult\Entity\TestResultStatuses::UNTESTED:
+                $iconSpan = $unknownSpan;
+                break;
+        }
+    } else {
+        $iconSpan = $unknownSpan;
+    }
+
+    $output = '
+<a class="node node__leaf case-node" href="#testCase-%1$s">
+    <div class="node-title" 
+        data-id="%1$s" 
+        data-class="%7$s" 
+        data-site="%10$s" 
+        data-result-id="%8$s" 
+        data-status="%9$s" 
+        style="margin-right: 20px;">
+        <div class="node__anchor">%6$s</div>
+        <div class="node__order">#%1$s</div>
+        <div class="node__name">%2$s</div>
+        <div style="display:none;" class="node__steps" 
+            data-preconditions="%3$s"
+            data-steps="%4$s"
+            data-result="%5$s">
+        </div>
+        <div class="tree__strut">&nbsp;</div>
+        <div class="node__stats">%11$ss</div>
+    </div>
+</a>';
+
+    return sprintf(
+        $output,
+        $case->getId(), //1
+        htmlspecialchars($case->getTitle()), //2
+        htmlspecialchars($case->getPreconditions()), //3
+        htmlspecialchars($case->getSteps()), //4
+        htmlspecialchars($case->getResult()), // 5
+        $iconSpan, // 6
+        $case->getAutomatedClass(), // 7
+        $result->getId(), // 8
+        strtolower(\TestResult\Entity\TestResultStatuses::getById($result->getStatus())), // 9
+        $viewModel->getSite($case->getSiteId())->getDomain(), // 10
+        $result->getElapsed() // 11
+    );
+}
+?>
+
+<div class="tree__content">
+    <div class="tree">
+        <div class="tree__content">
+            <?= renderNode($tree, $viewModel, $viewModel->getCaseIds()) ?>
+        </div>
+    </div>
+</div>

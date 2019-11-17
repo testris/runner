@@ -1,0 +1,61 @@
+<?php
+$this->headLink()->appendStylesheet('/plugins/bootstrap-select/css/bootstrap-select.min.css');
+$this->headScript()->appendFile('/plugins/bootstrap-select/js/bootstrap-select.min.js');
+
+/** @var Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$errors = $viewModel->getVariable('errors', []);
+$label = $viewModel->getVariable('label');
+if (!$label) {
+    $label = ucfirst($viewModel->getVariable('name', 'Select option'));
+}
+$name = $viewModel->getVariable('name');
+
+if ($viewModel->getVariable('value') === null) {
+    $selected = -1;
+} else {
+    $selected = (int)$viewModel->getVariable('value');
+}
+
+$options = $viewModel->getVariable('options');
+$class = $viewModel->getVariable('class', '');
+$disabled = '';
+$disabled = $viewModel->getVariable('disabled');
+if ($disabled) {
+    $disabled = 'disabled=""';
+}
+$inputWidthClass = $viewModel->getVariable('input-width-class', 'col-md-5');
+$liveSearchStyle = $viewModel->getVariable('liveSearchStyle', 'startsWith');
+?>
+<div class="form-group <?= (!empty($errors)) ? 'has-error' : ''; ?> <?=$class?>">
+    <label class="col-md-3 control-label"><?= $label ?></label>
+    <div class="<?=$inputWidthClass?>">
+        <select <?= $disabled ?> name="<?= $name ?>" class="form-control bs-select" data-live-search="true" data-size="7">
+            <?php foreach ($options as $value => $option): ?>
+                <option value="<?=$value?>" <?php if ($selected === $value) echo ' selected'; ?>><?= $option ?></option>
+            <?php endforeach; ?>
+        </select>
+        <?php if ($disabled): ?>
+            <input type="hidden" name="<?= $name ?>" value="<?=$selected?>">
+        <?php endif; ?>
+        <?php if (!empty($errors)): ?>
+            <?php if (is_array($errors)): ?>
+                <p class="help-block"><?=implode('<br/> ', $errors);?></p>
+            <?php else: ?>
+                <p class="help-block"><?=$errors?></p>
+            <?php endif; ?>
+        <?php endif; ?>
+    </div>
+</div>
+
+<?php $this->inlineScript()->captureStart();
+echo <<<JS
+$(document).ready(function(){
+    $('select[name="$name"]').selectpicker({
+        iconBase: 'fa',
+        tickIcon: 'fa-check',
+        liveSearchStyle: '$liveSearchStyle'
+    });
+});
+JS;
+$this->inlineScript()->captureEnd() ?>

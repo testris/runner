@@ -1,0 +1,13 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+
+$ip = $viewModel->getVariable('ip');
+$lastCommand = $viewModel->getVariable('lastCommand');
+$lastResponse = $viewModel->getVariable('lastResponse');
+?>
+<td>
+    <span class="lead"><?=$ip?></span><br/>
+    <?=$lastCommand?>:
+    <pre><?=$lastResponse?></pre>
+</td>

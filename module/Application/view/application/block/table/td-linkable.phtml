@@ -1,0 +1,19 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$class = $viewModel->getVariable('class');
+
+$href = '#';
+$routeName = $viewModel->getVariable('routeName');
+if ($routeName !== null) {
+    $routeParams = $viewModel->getVariable('routeParams', []);
+    $routeOptions = $viewModel->getVariable('routeOptions', []);
+    $href = $this->url($routeName, $routeParams, $routeOptions);
+}
+?>
+
+<td align="<?= $viewModel->getVariable('align', 'left') ?>">
+    <a href="<?= $href ?>" class="<?= $class ?>">
+        <?= $viewModel->getVariable($viewModel->getVariable('varName', 'value')) ?>
+    </a>
+</td>

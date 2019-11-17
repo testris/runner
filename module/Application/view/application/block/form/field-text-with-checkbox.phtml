@@ -1,0 +1,73 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+
+$errors = $viewModel->getVariable('errors', []);
+$label = $viewModel->getVariable('label');
+$labelClass = $viewModel->getVariable('label-class', 'col-md-3');
+if (!$label) {
+    $label = ucfirst($viewModel->getVariable('name', 'Input text'));
+}
+$name = $viewModel->getVariable('name');
+$placeholder = $viewModel->getVariable('placeholder');
+if (!$placeholder) {
+    $placeholder = 'Enter ' . strtolower($label);
+}
+$value = $viewModel->getVariable('value');
+$class = $viewModel->getVariable('class');
+$disabled = '';
+$disabled = $viewModel->getVariable('disabled', empty($value));
+if ($disabled) {
+    $disabled = 'disabled=""';
+}
+$readonly = $viewModel->getVariable('readonly');
+if ($readonly) {
+    $readonly = 'readonly=""';
+}
+?>
+<div class="form-group <?= (!empty($errors)) ? 'has-error' : ''; ?>">
+    <label class="<?=$labelClass?> control-label"><?= $label ?></label>
+    <div class="col-md-5">
+        <div class="input-group">
+            <span class="input-group-addon">
+                <?php if (empty($value)): ?>
+                    <input type="checkbox" id="<?=$name?>-checkbox">
+                <?php else: ?>
+                    <input type="checkbox" id="<?=$name?>-checkbox" checked>
+                <?php endif; ?>
+            </span>
+            <input type="text"
+                   name="<?=$name?>"
+                   id="<?=$name?>-control"
+                   class="form-control <?=$class?>"
+                   <?=$readonly?>
+                   <?=$disabled?>
+                   placeholder="<?= $placeholder ?>"
+                   value="<?=$value?>">
+        </div>
+
+        <?php if (!empty($errors)): ?>
+            <?php if (is_array($errors)): ?>
+                <span class="help-block"><?=implode('<br/> ', $errors);?></span>
+            <?php else: ?>
+                <span class="help-block"><?=$errors?></span>
+            <?php endif; ?>
+        <?php endif; ?>
+    </div>
+    <?= $this->linkToLog ?>
+</div>
+
+<?php $this->inlineScript()->captureStart();
+echo <<<JS
+$(document).ready(function(){
+    $('#$name-checkbox').click(function() {
+        if ($('#$name-control').attr('disabled')) {
+            $('#$name-control').removeAttr('disabled');
+        } else {
+            $('#$name-control').attr('disabled', 'disabled');
+            $('#$name-control').val('');
+        }
+    });
+});
+JS;
+$this->inlineScript()->captureEnd() ?>

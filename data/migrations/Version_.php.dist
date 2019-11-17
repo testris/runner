@@ -1,0 +1,15 @@
+<?php
+
+namespace Data\Migrations;
+
+use Migrations\AbstractVersion;
+
+class Version_%version% extends AbstractVersion
+{
+    public $description = '';
+
+    public function up()
+    {
+
+    }
+}

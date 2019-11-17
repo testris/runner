@@ -1,0 +1,21 @@
+<?php
+$this->headScript()->appendFile('/js/test.js');
+$viewModel = $this->viewModel()->getCurrent();
+$value = $viewModel->getVariable('value');
+$colorValueMap = $viewModel->getVariable('colorValueMap', []);
+$textValueMap = $viewModel->getVariable('textValueMap', []);
+$noLabel = $viewModel->getVariable('noLabel', false);
+$class = $viewModel->getVariable('class');
+
+$color = 'default';
+if (isset($colorValueMap[$value])) {
+    $color = $colorValueMap[$value];
+}
+$text = $value;
+if (isset($textValueMap[$value])) {
+    $text = $textValueMap[$value];
+}
+?>
+<td align="<?= $viewModel->getVariable('align', 'left') ?>">
+    <span class="<?= $class ?> <?php if (!$noLabel): ?>label label-<?= $color ?><?php endif; ?>"><?= $text ?></span>
+</td>

@@ -1,0 +1,9 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+
+?>
+<td align="<?= $viewModel->getVariable('align', 'left') ?>">
+    <?= $viewModel->getVariable('value') ?>
+    <?= $this->linkToLog ?>
+</td>

@@ -1,0 +1,109 @@
+<?php
+$this->headLink()->appendStylesheet('/plugins/bootstrap-daterangepicker/daterangepicker.min.css');
+$this->headScript()->appendFile('/plugins/moment.min.js');
+$this->headScript()->appendFile('/plugins/bootstrap-daterangepicker/daterangepicker.min.js');
+
+/** @var Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+
+$errorsFrom = $viewModel->getVariable('errorsFrom', []);
+$errorsTo = $viewModel->getVariable('errorsTo', []);
+
+$label = $viewModel->getVariable('label');
+
+if (!$label) {
+    $label = ucfirst($viewModel->getVariable('name', 'Input text'));
+}
+
+$nameFrom = $viewModel->getVariable('nameFrom');
+$nameTo = $viewModel->getVariable('nameTo');
+
+$valueFrom = $viewModel->getVariable('valueFrom');
+$valueTo = $viewModel->getVariable('valueTo');
+
+if ($valueFrom) {
+    $valueFrom = date("Y-m-d H:i", strtotime($valueFrom));
+}
+if ($valueTo) {
+    $valueTo = date("Y-m-d H:i", strtotime($valueTo));
+}
+$visibleDate = '';
+if ($valueFrom || $valueTo) {
+    $visibleDate = $valueFrom . ' - ' . $valueTo;
+}
+$placeholder = $viewModel->getVariable('placeholder', '');
+$inputWidthClass = $viewModel->getVariable('input-width-class', 'col-md-5');
+?>
+<div class="form-group">
+    <label class="control-label col-md-3"><?=$label?></label>
+    <div class="<?=$inputWidthClass?>">
+        <div class="input-group" id="<?=$nameFrom?>">
+            <input type="text"
+                   class="form-control form-control-date"
+                   value="<?=$visibleDate?>"
+                   placeholder="<?= $placeholder ?>">
+            <input type="hidden" class="form-control" name="<?=$nameFrom?>" value="<?= $valueFrom ?>">
+            <input type="hidden" class="form-control" name="<?=$nameTo?>" value="<?= $valueTo ?>">
+            <span class="input-group-btn">
+                <button class="btn default date-range-toggle" type="button">
+                    <i class="fa fa-calendar"></i>
+                </button>
+            </span>
+        </div>
+    </div>
+    <?php if (!empty($errorsFrom)): ?>
+        <?php if (is_array($errorsFrom)): ?>
+            <span class="help-block"><?=implode('<br/> ', $errorsFrom);?></span>
+        <?php else: ?>
+            <span class="help-block"><?=$errorsFrom?></span>
+        <?php endif; ?>
+    <?php endif; ?>
+    <?php if (!empty($errorsTo)): ?>
+        <?php if (is_array($errorsTo)): ?>
+            <span class="help-block"><?=implode('<br/> ', $errorsTo);?></span>
+        <?php else: ?>
+            <span class="help-block"><?=$errorsTo?></span>
+        <?php endif; ?>
+    <?php endif; ?>
+</div>
+
+<?php $this->inlineScript()->captureStart();
+echo <<<JS
+$(document).ready(function(){
+    $('#$nameFrom .form-control-date').on('change', function() {
+        if (!$(this).val()) {
+            $('#$nameFrom input[name=$nameFrom]').val('');
+            $('#$nameFrom input[name=$nameTo]').val('');
+        }
+    });
+    var datepicker = $('#$nameFrom').daterangepicker({
+            timePicker: true,
+            "timePicker24Hour": true,
+            timePickerIncrement: 10,
+            opens: (App.isRTL() ? 'left' : 'right'),
+            format: 'YYYY-MM-DD H:mm',
+            separator: ' to ',
+            minDate: '2012-01-01',
+            maxDate: moment().add(1, 'years').format('YYYY-MM-DD'),
+            locale: {
+                format: 'YYYY-MM-DD H:mm'
+            }
+        }
+    );
+    
+    if ('$valueFrom') {
+        $(datepicker).data('daterangepicker').setStartDate('$valueFrom');
+    }
+    
+    if ('$valueTo') {
+        $(datepicker).data('daterangepicker').setEndDate('$valueTo');
+    }
+        
+    datepicker.on('apply.daterangepicker', function(ev, picker) {
+        $('#$nameFrom input.form-control-date').val(picker.startDate.format('YYYY-MM-DD H:mm') + ' - ' + picker.endDate.format('YYYY-MM-DD H:mm'));
+        $('#$nameFrom input[name=$nameFrom]').val(picker.startDate.format('YYYY-MM-DD H:mm'));
+        $('#$nameFrom input[name=$nameTo]').val(picker.endDate.format('YYYY-MM-DD H:mm'));
+    }); 
+});
+JS;
+$this->inlineScript()->captureEnd() ?>

@@ -1,0 +1,372 @@
+<?php
+
+$this->headScript()->appendFile('/js/steps-run.js');
+$this->headScript()->appendFile('/js/test-run.js');
+
+/** @var \TestRun\ViewModel\TestResultViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$icon = $viewModel->getVariable('icon');
+
+/** @var \TestResult\Entity\TestResult[] $runResults */
+$runResults = $viewModel->getResults();
+
+/**
+ * @param \TestResult\Entity\TestResultStep $step
+ * @param \TestResult\Entity\TestResult $runResult
+ * @return string
+ */
+function renderStep($step, $runResult) {
+    $stepStatusPassed = '<span class="fa fa-check-circle fa-fw text_status_passed" data-tooltip="Passed"></span>';
+    $stepStatusFailed = '<span class="fa fa-times-circle fa-fw text_status_failed" data-tooltip="Failed"></span>';
+
+    $output = '
+    <div class="step">
+        <div class="step__title long-line">
+            <span class="step__status">%3$s</span>
+            <div class="step__name">%1$s</div>
+            <span class="step-stats__info">
+                <span class="step-stats__info_time">%2$sms</span>
+                <div style="float: right;">%4$s</div>
+            </span>
+        </div>
+    </div>';
+
+    $stepArrowPassed = '<span class="fa fa-chevron-right fa-fw text_status_passed"></span>';
+    $stepArrowFailed = '<span class="fa fa-chevron-right fa-fw text_status_failed"></span>';
+
+    $outputWithChildren = '
+    <div class="step %6$s">
+        <div class="step__title step__title_hasContent long-line">
+            <span class="step__arrow block__arrow">%5$s</span>
+            <div class="step__name">%1$s</div>
+            <span class="step-stats__info">
+                <span>%4$s</span>
+                <span class="step-stats__info_time">%2$sms</span>
+            </span>
+        </div>
+        <div class="step__content">%3$s</div>
+    </div>';
+
+    if ($step->hasChildren()) {
+        $resultOutput = sprintf(
+            $outputWithChildren,
+            $step->getActionText(), //1
+            number_format($step->getElapsed(), 0, '.', ' '), // 2
+            $step->hasChildren() ? renderStepChildren($step->getChildren(), $runResult) : '', // 3
+            $step->getClassName(), // 4
+            ($step->getStatus() == \TestRun\Entity\TestRunStatuses::FAILED) ? $stepArrowFailed : $stepArrowPassed,  // 5
+            ($step->getStatus() == \TestRun\Entity\TestRunStatuses::FAILED) ? 'step_expanded' : ''  // 6
+        );
+    } else {
+        if (in_array($step->getStatus(), [\TestRun\Entity\TestRunStatuses::FAILED, \TestRun\Entity\TestRunStatuses::BROKEN])) {
+            $resultOutput = sprintf(
+                $outputWithChildren,
+                $step->getActionText(), //1
+                number_format($step->getElapsed(), 0, '.', ' '), // 2
+                renderFailMessage($runResult), // 3
+                $step->getClassName(), // 4
+                $stepArrowFailed, // 5
+                'step_expanded' // 6
+            );
+        } else {
+            $resultOutput = sprintf(
+                $output,
+                $step->getActionText(), // 1
+                number_format($step->getElapsed(), 0, '.', ' '), // 2
+                ($step->getStatus() == \TestRun\Entity\TestRunStatuses::FAILED) ? $stepStatusFailed : $stepStatusPassed, // 3
+                getUiArtifacts($step, $runResult->getRunId())
+            );
+        }
+    }
+
+    return $resultOutput;
+}
+
+/**
+ * @param \TestResult\Entity\TestResultStep[] $steps
+ * @param \TestResult\Entity\TestResult $caseResult
+ * @return string
+ */
+function renderStepChildren($steps, $caseResult) {
+    $stepStatusPassed = '<span class="fa fa-check-circle fa-fw text_status_passed" data-tooltip="Passed"></span>';
+    $stepStatusFailed = '<span class="fa fa-times-circle fa-fw text_status_failed" data-tooltip="Failed"></span>';
+
+    $oneStepOutput = '
+    <div class="step step_expanded">
+        <div class="step__title long-line">
+            <span class="step__status">%4$s</span>
+            <div class="step__name">%1$s</div>
+            <span class="step-stats__info">
+                <span class="step-stats__info_time">%2$sms</span>
+                <div style="float: right;">%5$s</div>
+            </span>
+        </div>
+        <div class="step__content">%3$s</div>
+    </div>';
+
+    $output = '';
+    foreach ($steps as $step) {
+        $failMessage = '';
+        if (in_array($step->getStatus(), [\TestRun\Entity\TestRunStatuses::FAILED, \TestRun\Entity\TestRunStatuses::BROKEN])) {
+            $failMessageHtml = '
+                <div class="status-details status-details_status_failed">
+                    <div class="status-details__content">
+                        <div class="status-details__trace-toggle status-details__trace-toggle_status_failed clickable">
+                            <pre class="status-details__message bg-red-flamingo bg-font-red-flamingo" style="border-color: #EF4836;">%1$s</pre>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <a class="attachment-row" href="%2$s" target="_blank">
+                        <span class="attachment-row__arrow "><span class="fa fa-arrows-alt fa-fw"></span></span>
+                        <div class="attachment-row__icon">
+                            <span class="fa fa-file-code-o" data-tooltip="text/plain"></span>
+                        </div>
+                        <div class="attachment-row__name long-line">HTML</div>
+                        <div class="attachment-row__control attachment-row__link">
+                            <div><span class="fa fa-save"></span> %4$s</div>
+                        </div>
+                    </a>
+                    <a class="attachment-row" href="%3$s" target="_blank">
+                        <span class="attachment-row__arrow "><span class="fa fa-arrows-alt fa-fw"></span></span>
+                        <div class="attachment-row__icon">
+                            <span class="fa fa-file-image-o" data-tooltip="text/plain"></span>
+                        </div>
+                        <div class="attachment-row__name long-line">PNG</div>
+                        <div class="attachment-row__control attachment-row__link">
+                            <div ><span class="fa fa-save"></span> %5$s</div>
+                        </div>
+                    </a>
+                </div>';
+
+            $htmlArtifactPath = sprintf(
+                '/img/artifacts/%1$s/%2$s',
+                $caseResult->getRunId(),
+                $step->getHtmlArtifact()
+            );
+            $pngArtifactPath = sprintf(
+                '/img/artifacts/%1$s/%2$s',
+                $caseResult->getRunId(),
+                $step->getPngArtifact()
+            );
+
+            $rootDir = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
+
+            $htmlSize = 0;
+            if (file_exists($rootDir . '/public' . $htmlArtifactPath)) {
+                $htmlSize = filesize($rootDir . '/public' . $htmlArtifactPath);
+            }
+
+            $pngSize = 0;
+            if (file_exists($rootDir . '/public' . $pngArtifactPath)) {
+                $pngSize = filesize($rootDir . '/public' . $pngArtifactPath);
+            }
+
+            $failMessage = sprintf(
+                $failMessageHtml,
+                $caseResult->getFailMessage(), // 1
+                $htmlArtifactPath, // 2
+                $pngArtifactPath, // 3
+                humanFilesize($htmlSize), // 4
+                humanFilesize($pngSize) // 5
+            );
+        }
+
+        $output .= sprintf(
+            $oneStepOutput,
+            $step->getActionText(), //1
+            number_format($step->getElapsed(), 0, '.', ' '), // 2
+            $failMessage, // 3
+            ($step->getStatus() == \TestRun\Entity\TestRunStatuses::FAILED) ? $stepStatusFailed : $stepStatusPassed, // 4
+            getUiArtifacts($step, $caseResult->getRunId()) // 5
+        );
+    }
+
+    return $output;
+}
+
+/**
+ * @param \TestResult\Entity\TestResult $caseResult
+ * @return string
+ */
+function renderFailMessage($caseResult) {
+    $failMessageHtml = '
+        <div class="status-details status-details_status_failed">
+            <div class="status-details__content">
+                <div class="status-details__trace-toggle status-details__trace-toggle_status_failed clickable">
+                    <pre class="status-details__message bg-red-flamingo bg-font-red-flamingo" style="border-color: #EF4836;">%1$s</pre>
+                </div>
+            </div>
+        </div>';
+
+    $failMessage = sprintf(
+        $failMessageHtml,
+        $caseResult->getFailMessage() // 1
+    );
+
+    return $failMessage;
+}
+
+function getUiArtifacts($step, $runId)
+{
+    $uiArtifacts = '';
+    if ($step->getReferenceArtifact()) {
+        $uiArtifacts = sprintf(
+            '<a href="/img/artifacts/%1$s/%2$s" target="_blank" title="Original" class="step-stats__artifacts fa fa-image fa-fw "></a>',
+            $runId,
+            $step->getReferenceArtifact()
+        );
+        $uiArtifacts .= sprintf(
+            '<a href="/img/artifacts/%1$s/%2$s" target="_blank" title="Screenshot" class="step-stats__artifacts fa fa-camera fa-fw "></a>',
+            $runId,
+            $step->getCurrentArtifact()
+        );
+
+        if ($step->getDiffArtifact()) {
+            $uiArtifacts .= sprintf(
+                '<a href="/img/artifacts/%1$s/%2$s" target="_blank" title="Diff"  class="step-stats__artifacts fa fa-object-ungroup fa-fw "></a>',
+                $runId,
+                $step->getDiffArtifact()
+            );
+        }
+        if ($step->getReferenceSource()) {
+            $source = $step->getReferenceSource();
+            $uiArtifacts .="
+            <a href='#delete-window' class='source-delete-btn step-stats__artifacts fa fa-recycle fa-fw' data-toggle='modal' data-filename='$source'></a>";
+        }
+    }
+
+    return $uiArtifacts;
+}
+
+function humanFilesize($bytes, $decimals = 0) {
+    $size = array('B','KB','MB','GB','TB','PB','EB','ZB','YB');
+    $factor = floor((strlen($bytes) - 1) / 3);
+    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
+}
+?>
+<div class="page-head">
+    <div class="container-fluid">
+        <!-- BEGIN PAGE TITLE -->
+        <div class="page-title">
+            <h1>
+                <i class="fa <?= $viewModel->getVariable('icon') ?>"></i>
+                <?= $viewModel->getVariable('title', 'List of entities') ?>
+            </h1>
+        </div>
+        <!-- END PAGE TITLE -->
+        <?=$this->pageToolbar?>
+    </div>
+</div>
+<div class="page-content">
+    <div class="container-fluid">
+        <!-- BEGIN PAGE CONTENT INNER -->
+        <div class="page-content-inner">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- BEGIN Portlet PORTLET-->
+                    <div class="portlet">
+                        <div class="portlet-title">
+                            <div class="caption"><i class="fa fa-list"></i>Cases</div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="scroller" style="height: 610px;" data-always-visible="1" data-rail-visible1="0" data-handle-color="#D7DCE2">
+                                <?= $this->sections?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 left-separator">
+                    <!-- BEGIN Portlet PORTLET-->
+                    <div class="portlet" id="case-wrapper" style="display: none;">
+                        <div class="portlet-title">
+                            <div class="caption" id="case-title"></div>
+                        </div>
+                        <div class="portlet-body tabbable-line" style="padding-top: 0px;">
+                            <p id="case-site" class="margin-bottom-5 text-muted sbold"></p>
+                            <p id="case-class" class="margin-bottom-5 text-muted sbold"></p>
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a href="#execution" data-toggle="tab"> Execution </a>
+                                </li>
+                                <li>
+                                    <a href="#case" data-toggle="tab"> Case </a>
+                                </li>
+                                <li>
+                                    <a href="#history" id="history-btn" data-toggle="tab"> History </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" style="padding-top: 10px;">
+                                <div class="tab-pane fade active in" id="execution">
+                                    <div class="execution__content">
+                                        <div class="step step_expanded">
+                                            <div class="step__content" id="execution-steps">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="case">
+                                    <h4>Предусловия</h4>
+                                    <ol id="case-preconditions"></ol>
+                                    <h4>Шаги</h4>
+                                    <ol id="case-steps"></ol>
+                                    <h4>Результат</h4>
+                                    <ol id="case-result"></ol>
+                                </div>
+                                <div class="tab-pane fade" id="history">
+                                    <p class="margin-bottom-10">Success rate 100% (3 of 3)</p>
+                                    <p class="margin-bottom-10">
+                                        <span class="label label_status_passed rounded-3">passed</span>
+                                        <a class="link" href="javascript:" target="_blank">
+                                            <span>10/10/2014 at 16:50:39</span>
+                                        </a>
+                                    </p>
+                                    <p class="margin-bottom-10">
+                                        <span class="label label_status_passed rounded-3">passed</span>
+                                        <a class="link" href="javascript:" target="_blank">
+                                            <span>10/10/2014 at 16:50:39</span>
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END PAGE CONTENT INNER -->
+    </div>
+
+    <?php foreach ($runResults as $runResult): ?>
+        <div id="result-steps-<?=$runResult->getId()?>" style="display: none;">
+        <?php foreach ($viewModel->getSteps($runResult->getCaseId()) as $step): ?>
+            <?php if ($step): ?>
+                <?=renderStep($step, $runResult)?>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        </div>
+    <?php endforeach; ?>
+</div>
+
+<!-- BEGIN MODAL BLOCK -->
+<div class="modal fade" id="delete-window" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Подтвердите удаление.</h4>
+            </div>
+            <div class="modal-body">
+                <p>Вы действительно хотите сбросить эталон изображения?</p>
+            </div>
+            <div class="modal-footer">
+                <form id="delete-source-form" action="/reference/delete" method="POST">
+                    <input type="hidden" name="filename" value="" id="source-filename">
+                    <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                    <button id="delete-source-form-submit" type="submit" class="btn red">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END MODAL BLOCK -->

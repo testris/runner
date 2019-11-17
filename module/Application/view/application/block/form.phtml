@@ -1,0 +1,28 @@
+<?php
+$viewModel = $this->viewModel()->getCurrent();
+
+$method =  $viewModel->getVariable('method', 'get');
+$action = '';
+
+if ($viewModel->getVariable('actionRoute')) {
+    $action = $this->url(
+        $viewModel->getVariable('actionRoute'),
+        $viewModel->getVariable('actionRouteOptions', [])
+    );
+}
+$enctype = $viewModel->getVariable('enctype', 'application/x-www-form-urlencoded');
+?>
+<!-- BEGIN FORM-->
+<form action="<?= $action ?>" method="<?= $method ?>" enctype="<?= $enctype ?>" class="form-horizontal">
+    <div class="form-body">
+        <?= $this->fields ?>
+    </div>
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-md-offset-3 col-md-4">
+                <?=$this->{'form-button'};?>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- END FORM-->

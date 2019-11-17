@@ -1,0 +1,9 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$value = $viewModel->getVariable('value');
+$options = $viewModel->getVariable('options', []);
+?>
+<td align="<?= $viewModel->getVariable('align', 'left') ?>">
+    <?= $options[$value] ?>
+</td>

@@ -1,0 +1,36 @@
+<?php
+$viewModel = $this->viewModel()->getCurrent();
+$icon = $viewModel->getVariable('icon');
+?>
+<div class="page-head">
+    <div class="container-fluid">
+        <!-- BEGIN PAGE TITLE -->
+        <div class="page-title">
+            <h1><i class="fa <?= $viewModel->getVariable('icon') ?>"></i> <?= $viewModel->getVariable('title', 'List of entities') ?></h1>
+
+        </div>
+        <!-- END PAGE TITLE -->
+        <?=$this->pageToolbar?>
+    </div>
+</div>
+<div class="page-content">
+    <div class="container-fluid">
+        <!-- BEGIN PAGE CONTENT INNER -->
+        <div class="page-content-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <?= $this->filter ?>
+                    <div class="portlet">
+                        <div class="portlet-body">
+                            <div class="table-scrollable">
+                                <?= $this->table ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?= $this->paginator ?>
+                </div>
+            </div>
+        </div>
+        <!-- END PAGE CONTENT INNER -->
+    </div>
+</div>

@@ -1,0 +1,7 @@
+<?php
+
+namespace RabbitMq;
+
+return [
+
+];

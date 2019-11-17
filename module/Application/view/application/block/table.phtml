@@ -1,0 +1,14 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$trHeadViews = $viewModel->getChildrenByCaptureTo('table-head-row');
+$trBodyViews = $viewModel->getChildrenByCaptureTo('table-body-row');
+?>
+<table class="table table-advance table-bordered">
+    <thead>
+    <?= $this->{'table-head-row'} ?>
+    </thead>
+    <tbody>
+    <?= $this->{'table-body-row'}; ?>
+    </tbody>
+</table>

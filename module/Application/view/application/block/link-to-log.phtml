@@ -1,0 +1,163 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$objectId = $viewModel->getVariable('objectId');
+$classId = $viewModel->getVariable('classId');
+$typeId = $viewModel->getVariable('typeId');
+
+$logLink = $this->url('api-ActionLog-list', [], [
+    'query' => [
+        'objectId_equalTo' => $objectId,
+        'classId_equalTo' => $classId,
+        'typeId_in' => [$typeId],
+        'limit' => 6,
+    ]
+]);
+
+$adminActionLogLink = $this->url('admin-ActionLog-list', [], [
+    'query' => [
+        'objectId_equalTo' => $objectId,
+        'classId_equalTo' => $classId,
+        'typeId_in' => [$typeId],
+    ]
+]);
+
+?>
+<button class="btn btn-default btn-xs log-popover-btn-<?= $typeId ?>-<?= $objectId ?>"
+        type="button"
+        data-toggle="popover"
+        data-container="body"
+        data-route="<?= $logLink ?>"
+        data-class-id="<?= $classId ?>"
+        data-type-id="<?= $typeId ?>"
+        data-object-id="<?= $objectId ?>">
+    Log
+</button>
+
+<div id="log-popover-content-<?= $typeId ?>-<?= $objectId ?>" style="display:none;">
+    <div style="height: 280px" class="log-scroller" data-always-visible="1" data-rail-visible="1">
+        <table class="table table-condensed">
+            <thead>
+            <tr>
+                <th width="25%"> Date </th>
+                <th width="25%"> Changed from </th>
+                <th width="25%"> Changed to </th>
+                <th width="25%"> Changed by </th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div class="row button-more" style="height: 21px">
+        <div class="col-xs-12">
+            <div class="text-right">
+                <a style="display:none;" class="btn btn-default btn-xs pull-right" href="<?= $adminActionLogLink ?>" target="_blank">
+                    More
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php $this->inlineScript()->captureStart();
+echo <<<JS
+var logCache = {};
+$(document).ready(function(){
+    var popover = $('.log-popover-btn-$typeId-$objectId').popover({
+        placement: 'auto right',
+        content: $('#log-popover-content-$typeId-$objectId').html(),
+        html: true,
+        title: 'Log <button class="close close-popover pull-right">&times;</button>'
+    }).click(function() {
+        var popoverId = $(this).attr('aria-describedby');
+        
+        App.blockUI({
+            target: '#' + popoverId,
+            animate: true
+        });
+        
+        var route = $(this).data('route');
+        var objectId = $(this).data('object-id');
+        var typeId = $(this).data('type-id');
+
+        if (objectId + '_' + typeId in logCache) {
+            onLogRecieved(logCache[objectId + '_' + typeId]);
+        } else {
+            $.ajax({
+                url: route,
+                method: 'GET',
+                contentType: 'application/json',
+                success: function(result) {
+                    logCache[objectId + '_' + typeId] = result.result;
+                    onLogRecieved(result.result);
+                }
+            });
+        }
+        
+        function onLogRecieved(result) {
+            var tbody = $('#' + popoverId + ' table tbody'); 
+            
+            if (!$.isEmptyObject(result)) {
+                $.each(result, function(id, logEntry) {
+                    if (result.length > 5 && id == (result.length - 1)) {
+                        return;
+                    }
+                    
+                    tbody.append("<tr>" +
+                     "<td><small>" + logEntry.date + "</small></td>" +
+                     "<td><small>" + logEntry.valueFrom + "</small></td>" +
+                     "<td><small>" + logEntry.valueTo + "</small></td>" +
+                     "<td><small>" + logEntry.admin + "</small></td>" +
+                     "</tr>");
+                });
+            }
+                   
+            if (result.length > 5) {
+                $('#' + popoverId + ' .button-more .btn').show();
+            } else {
+                $('#' + popoverId + ' .button-more .btn').hide();
+            }
+        
+            $(".log-scroller").slimScroll({
+                allowPageScroll: false, // allow page scroll when the element scroll is ended
+                size: '7px',
+                color: ($(this).attr("data-handle-color") ? $(this).attr("data-handle-color") : '#bbb'),
+                wrapperClass: ($(this).attr("data-wrapper-class") ? $(this).attr("data-wrapper-class") : 'slimScrollDiv'),
+                railColor: ($(this).attr("data-rail-color") ? $(this).attr("data-rail-color") : '#eaeaea'),
+                position: 'right',
+                height: "280px",
+                alwaysVisible: ($(this).attr("data-always-visible") == "1" ? true : false),
+                railVisible: ($(this).attr("data-rail-visible") == "1" ? true : false),
+                disableFadeOut: true
+            });
+            
+            App.unblockUI('#' + popoverId);
+        }
+    });
+    
+    popover.on("show.bs.popover", function(e){
+        popover.data("bs.popover").tip().css({"min-width": "600px"});
+        popover.data("bs.popover").tip().css({"max-width": "600px"});
+    });
+    
+    popover.on("shown.bs.popover", function() {
+        $('.close-popover').click(function() {
+            popover.popover('hide');
+        });
+    });
+    
+    popover.on('hidden.bs.popover', function (e) {
+        $(e.target).data("bs.popover").inState.click = false;
+    });
+    
+    popover.on('hidden.bs.popover', function (e) {
+        $(e.target).data("bs.popover").inState = { 
+            click: false, 
+            hover: false, 
+            focus: false 
+        }
+    });
+});
+JS;
+$this->inlineScript()->captureEnd() ?>

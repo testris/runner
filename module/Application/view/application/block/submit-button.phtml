@@ -1,0 +1,17 @@
+<?php
+$viewModel = $this->viewModel()->getCurrent();
+$color = $viewModel->getVariable('color', 'default');
+$size = $viewModel->getVariable('size');
+if ($size !== null) {
+    $size = "btn-$size";
+}
+$icon = $viewModel->getVariable('icon');
+$text = $viewModel->getVariable('text', 'Submit');
+$elementId = 'submit-button-' . str_replace(' ', '-', strtolower($text));
+?>
+<button type="submit" class="btn btn-<?= $color ?> <?= $size ?>" id="<?= $elementId ?>">
+    <?php if ($icon !== null): ?>
+        <i class="fa fa-<?= $icon ?>"></i>
+    <?php endif; ?>
+    <?= $text ?>
+</button>

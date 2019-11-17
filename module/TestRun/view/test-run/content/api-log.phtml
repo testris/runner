@@ -1,0 +1,50 @@
+<?php
+/** @var \TestRun\ViewModel\OutputViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$icon = $viewModel->getVariable('icon');
+/** @var \TestRun\Entity\ApiLog[] $log */
+$log = $viewModel->getVariable('log');
+?>
+<div class="page-head">
+    <div class="container-fluid">
+        <!-- BEGIN PAGE TITLE -->
+        <div class="page-title">
+            <h1>
+                <i class="fa <?= $viewModel->getVariable('icon') ?>"></i>
+                <?= $viewModel->getVariable('title', 'List of entities') ?>
+            </h1>
+        </div>
+        <!-- END PAGE TITLE -->
+        <?=$this->pageToolbar?>
+    </div>
+</div>
+<div class="page-content">
+    <div class="container-fluid">
+        <!-- BEGIN PAGE CONTENT INNER -->
+        <div class="page-content-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN Portlet PORTLET-->
+                    <?php foreach($log as $entry):?>
+                        <div class="portlet light bordered">
+                            <div class="portlet-title">
+                                <div class="caption font-green-sharp">
+                                    <span class="caption-subject bold"><?=$entry->getUri()?></span>
+                                    <span class="caption-helper">[<?=$entry->getCreated()?>]</span>
+                                </div>
+                            </div>
+                            <div class="portlet-body">
+                                <h3>Request</h3>
+                                <pre><?=json_encode(json_decode($entry->getRequest()), JSON_PRETTY_PRINT);?></pre>
+
+                                <h3>Response</h3>
+                                <pre><?=json_encode(json_decode($entry->getResponse()), JSON_PRETTY_PRINT);?></pre>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+        <!-- END PAGE CONTENT INNER -->
+    </div>
+</div>

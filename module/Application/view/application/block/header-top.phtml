@@ -1,0 +1,35 @@
+<div class="page-header-top">
+    <div class="container-fluid">
+        <div class="page-logo">
+            <a href="/">Test<span>Runner</span></a>
+        </div>
+        <a href="javascript:;" class="menu-toggler"></a>
+        <div class="top-menu">
+            <ul class="nav navbar-nav pull-right">
+                <li class="dropdown dropdown-user dropdown-dark">
+                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="true">
+                        <img alt="" class="img-circle" src="/img/avatar0.png">
+                        <?php if ($this->isAuthorized()): ?>
+                            <span class="username username-hide-mobile"><?=$this->getMyself()->getName()?></span>
+                        <?php endif; ?>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-default">
+                        <li>
+                            <a href="#"><i class="icon-user"></i> My Profile </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="icon-rocket"></i> My Tasks
+                                <span class="badge badge-success"> 7 </span>
+                            </a>
+                        </li>
+                        <li class="divider"> </li>
+                        <li>
+                            <a href="/logout"><i class="icon-key"></i> Log Out </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

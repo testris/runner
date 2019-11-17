@@ -1,0 +1,631 @@
+<?php
+$viewModel = $this->viewModel()->getCurrent();
+$icon = $viewModel->getVariable('icon');
+?>
+<div class="page-head">
+    <div class="container-fluid">
+        <!-- BEGIN PAGE TITLE -->
+        <div class="page-title">
+            <h1>
+                <i class="fa <?= $viewModel->getVariable('icon') ?>"></i>
+                <?= $viewModel->getVariable('title', 'List of entities') ?>
+            </h1>
+        </div>
+        <!-- END PAGE TITLE -->
+        <?=$this->pageToolbar?>
+    </div>
+</div>
+<div class="page-content">
+    <div class="container-fluid">
+        <!-- BEGIN PAGE CONTENT INNER -->
+        <div class="page-content-inner">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- BEGIN Portlet PORTLET-->
+                    <div class="portlet">
+                        <div class="portlet-title">
+                            <div class="caption"><i class="fa fa-list"></i>Cases</div>
+                            <div class="actions">
+                                <span class="badge badge-default badge-roundless label_status_passed">13</span>
+                                <span class="badge badge-default badge-roundless label_status_skipped">3</span>
+                                <span class="badge badge-default badge-roundless label_status_failed">2</span>
+                                <span class="badge badge-default badge-roundless label_status_broken">7</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="tree__content">
+                                <div class="tree">
+                                    <div class="tree__content" data-uid="b1a8273437954620fa374b796ffaacdd">
+                                        <div class="node">
+                                            <div class="node-title long-line"
+                                                 data-uid="08fa2875fee9013d8acfbc64e906b5e8">
+                                                <span class="node__arrow block__arrow"><span
+                                                            class="angle fa fa-angle-right fa-fw fa-lg"></span></span>
+                                                <div class="node__name">
+                                                    Screenshot
+                                                </div>
+                                                <div class="tree__strut">&nbsp;</div>
+                                                <span class="node__stats">
+                                                    <span class="badge badge-default badge-roundless label_status_failed">2</span>
+                                                    <span class="badge badge-default badge-roundless label_status_passed">3</span>
+                                                </span>
+                                            </div>
+
+                                            <div class="node-children">
+                                                <div class="node">
+                                                    <div class="node-title long-line"
+                                                         data-uid="fc4546163c916e12f72b7f3ea5deb8cd">
+                                                        <span class="node__arrow block__arrow"><span
+                                                                    class="angle fa fa-angle-right fa-fw fa-lg"></span></span>
+                                                        <div class="node__name">
+                                                            OtherScreenshot
+                                                        </div>
+                                                        <div class="tree__strut">&nbsp;</div>
+                                                        <span class="node__stats">
+                                                            <span class="badge badge-default badge-roundless label_status_failed">1</span>
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="node-children">
+                                                        <a class="node node__leaf"
+                                                           href="#behaviors/fc4546163c916e12f72b7f3ea5deb8cd/a5fc7f2bcded5c71/">
+                                                            <div class="node-title" data-uid="a5fc7f2bcded5c71"
+                                                                 data-parentuid="fc4546163c916e12f72b7f3ea5deb8cd">
+                                                                <div class="node__anchor">
+                                                                    <span class="fa fa-times-circle fa-fw text_status_failed fa-lg"
+                                                                          data-tooltip="Failed"></span>
+                                                                </div>
+                                                                <div class="node__order">#1</div>
+                                                                <div class="node__name">
+                                                                    &lt;script&gt;3443&lt;/script&gt;
+                                                                </div>
+                                                                <div class="node__flaky node__flaky_shown">
+                                                                    <span class="fa fa-bomb [object Object]"
+                                                                          data-tooltip="Test is flaky"></span>
+                                                                </div>
+                                                                <div class="tree__strut">&nbsp;</div>
+                                                                <div class="node__stats">765ms</div>
+                                                            </div>
+                                                        </a></div>
+                                                </div>
+                                                <div class="node">
+                                                    <div class="node-title long-line"
+                                                         data-uid="0b7a8c65441223ee4aecc093714f894e">
+                                                        <span class="node__arrow block__arrow"><span class="angle fa fa-angle-right fa-fw fa-lg"></span></span>
+                                                        <div class="node__name">
+                                                            WebdriverScreenshot
+                                                        </div>
+                                                        <div class="tree__strut">&nbsp;</div>
+                                                        <span class="node__stats">
+                                                            <span class="badge badge-default badge-roundless label_status_failed">1</span>
+                                                            <span class="badge badge-default badge-roundless label_status_passed">3</span>
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="node-children">
+                                                        <a class="node node__leaf"
+                                                           href="#behaviors/0b7a8c65441223ee4aecc093714f894e/89eb5e28fd4788cd/">
+                                                            <div class="node-title" data-uid="89eb5e28fd4788cd"
+                                                                 data-parentuid="0b7a8c65441223ee4aecc093714f894e">
+                                                                <div class="node__anchor">
+                                                                    <span class="fa fa-check-circle fa-fw text_status_passed fa-lg"
+                                                                          data-tooltip="Passed"></span>
+                                                                </div>
+                                                                <div class="node__order">#2</div>
+                                                                <div class="node__name">
+                                                                    Empty text search
+                                                                </div>
+                                                                <div class="node__flaky">
+                                                                    <span class="fa fa-bomb [object Object]"
+                                                                          data-tooltip="Test is flaky"></span>
+                                                                </div>
+                                                                <div class="tree__strut">&nbsp;</div>
+                                                                <div class="node__stats">7s 180ms</div>
+                                                            </div>
+                                                        </a><a class="node node__leaf"
+                                                               href="#behaviors/0b7a8c65441223ee4aecc093714f894e/971feececb7eebd8/">
+                                                            <div class="node-title" data-uid="971feececb7eebd8"
+                                                                 data-parentuid="0b7a8c65441223ee4aecc093714f894e">
+                                                                <div class="node__anchor">
+                                                                    <span class="fa fa-times-circle fa-fw text_status_failed fa-lg"
+                                                                          data-tooltip="Failed"></span>
+                                                                </div>
+                                                                <div class="node__order">#3</div>
+                                                                <div class="node__name">
+                                                                    Page loading test
+                                                                </div>
+                                                                <div class="node__flaky">
+                                                                    <span class="fa fa-bomb [object Object]"
+                                                                          data-tooltip="Test is flaky"></span>
+                                                                </div>
+                                                                <div class="tree__strut">&nbsp;</div>
+                                                                <div class="node__stats">5s 134ms</div>
+                                                            </div>
+                                                        </a><a class="node node__leaf"
+                                                               href="#behaviors/0b7a8c65441223ee4aecc093714f894e/d4577de9db1ccf7e/">
+                                                            <div class="node-title" data-uid="d4577de9db1ccf7e"
+                                                                 data-parentuid="0b7a8c65441223ee4aecc093714f894e">
+                                                                <div class="node__anchor">
+                                                                    <span class="fa fa-check-circle fa-fw text_status_passed fa-lg"
+                                                                          data-tooltip="Passed"></span>
+                                                                </div>
+                                                                <div class="node__order">#4</div>
+                                                                <div class="node__name">
+                                                                    Usual search test
+                                                                </div>
+                                                                <div class="node__flaky">
+                                                                    <span class="fa fa-bomb [object Object]"
+                                                                          data-tooltip="Test is flaky"></span>
+                                                                </div>
+                                                                <div class="tree__strut">&nbsp;</div>
+                                                                <div class="node__stats">7s 662ms</div>
+                                                            </div>
+                                                        </a><a class="node node__leaf"
+                                                               href="#behaviors/0b7a8c65441223ee4aecc093714f894e/6029f1b69d717e31/">
+                                                            <div class="node-title" data-uid="6029f1b69d717e31"
+                                                                 data-parentuid="0b7a8c65441223ee4aecc093714f894e">
+                                                                <div class="node__anchor">
+                                                                    <span class="fa fa-check-circle fa-fw text_status_passed fa-lg"
+                                                                          data-tooltip="Passed"></span>
+                                                                </div>
+                                                                <div class="node__order">#1</div>
+                                                                <div class="node__name">
+                                                                    Wildcard search test
+                                                                </div>
+                                                                <div class="node__flaky">
+                                                                    <span class="fa fa-bomb [object Object]"
+                                                                          data-tooltip="Test is flaky"></span>
+                                                                </div>
+                                                                <div class="tree__strut">&nbsp;</div>
+                                                                <div class="node__stats">7s 573ms</div>
+                                                            </div>
+                                                        </a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="node">
+                                            <div class="node-title long-line"
+                                                 data-uid="6ccc9fb01284ab4f0b6a552ebbf26026">
+                                                <span class="node__arrow block__arrow"><span
+                                                            class="angle fa fa-angle-right fa-fw fa-lg"></span></span>
+                                                <div class="node__name">
+                                                    SimpleStories
+                                                </div>
+                                                <div class="tree__strut">&nbsp;</div>
+                                                <span class="node__stats">
+                                                    <span class="badge badge-default badge-roundless label_status_passed">3</span>
+                                                    <span class="badge badge-default badge-roundless label_status_skipped">1</span>
+                                                    <span class="badge badge-default badge-roundless label_status_unknown">2</span>
+                                                </span>
+                                            </div>
+
+                                            <div class="node-children">
+                                                <div class="node">
+                                                    <div class="node-title long-line"
+                                                         data-uid="2c326d6fd7395f8c955a78fd036582ac">
+                                                        <span class="node__arrow block__arrow"><span
+                                                                    class="angle fa fa-angle-right fa-fw fa-lg"></span></span>
+                                                        <div class="node__name">
+                                                            SuccessStory
+                                                        </div>
+                                                        <div class="tree__strut">&nbsp;</div>
+                                                        <span class="node__stats">
+                                                            <span class="badge badge-default badge-roundless label_status_passed">3</span>
+                                                            <span class="badge badge-default badge-roundless label_status_skipped">1</span>
+                                                            <span class="badge badge-default badge-roundless label_status_unknown">2</span>
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="node-children">
+                                                        <a class="node node__leaf"
+                                                           href="#behaviors/2c326d6fd7395f8c955a78fd036582ac/6202705ed1c5bbb0/">
+                                                            <div class="node-title" data-uid="6202705ed1c5bbb0"
+                                                                 data-parentuid="2c326d6fd7395f8c955a78fd036582ac">
+                                                                <div class="node__anchor">
+                                                                    <span class="fa fa-minus-circle fa-fw text_status_skipped fa-lg"
+                                                                          data-tooltip="Skipped"></span>
+                                                                </div>
+                                                                <div class="node__order">#6</div>
+                                                                <div class="node__name">
+                                                                    Test what do nothing and always passed right, but
+                                                                    have a very long title, over 100 symbols, seriously
+                                                                </div>
+                                                                <div class="node__flaky">
+                                                                    <span class="fa fa-bomb [object Object]"
+                                                                          data-tooltip="Test is flaky"></span>
+                                                                </div>
+                                                                <div class="tree__strut">&nbsp;</div>
+                                                                <div class="node__stats">200ms</div>
+                                                            </div>
+                                                        </a><a class="node node__leaf"
+                                                               href="#behaviors/2c326d6fd7395f8c955a78fd036582ac/6172bd1608a307b7/">
+                                                            <div class="node-title" data-uid="6172bd1608a307b7"
+                                                                 data-parentuid="2c326d6fd7395f8c955a78fd036582ac">
+                                                                <div class="node__anchor">
+                                                                    <span class="fa fa-check-circle fa-fw text_status_passed fa-lg"
+                                                                          data-tooltip="Passed"></span>
+                                                                </div>
+                                                                <div class="node__order">#5</div>
+                                                                <div class="node__name">
+                                                                    Test what do nothing and always passed right, but
+                                                                    have a very long title, over 100 symbols, seriously
+                                                                </div>
+                                                                <div class="node__flaky">
+                                                                    <span class="fa fa-bomb [object Object]"
+                                                                          data-tooltip="Test is flaky"></span>
+                                                                </div>
+                                                                <div class="tree__strut">&nbsp;</div>
+                                                                <div class="node__stats">0s</div>
+                                                            </div>
+                                                        </a><a class="node node__leaf"
+                                                               href="#behaviors/2c326d6fd7395f8c955a78fd036582ac/fb0d5d3265e9ecba/">
+                                                            <div class="node-title" data-uid="fb0d5d3265e9ecba"
+                                                                 data-parentuid="2c326d6fd7395f8c955a78fd036582ac">
+                                                                <div class="node__anchor">
+                                                                    <span class="fa fa-question-circle fa-fw text_status_unknown fa-lg"
+                                                                          data-tooltip="Unknown"></span>
+                                                                </div>
+                                                                <div class="node__order">#2</div>
+                                                                <div class="node__name">
+                                                                    testFour
+                                                                </div>
+                                                                <div class="node__flaky">
+                                                                    <span class="fa fa-bomb [object Object]"
+                                                                          data-tooltip="Test is flaky"></span>
+                                                                </div>
+
+                                                                <div class="node__parameters long-line line-ellipsis">
+                                                                    <span>&nbsp;</span>
+                                                                    null<span
+                                                                            class="node__parameters_separator">,</span>
+                                                                    null<span
+                                                                            class="node__parameters_separator">,</span>
+                                                                    some-value<span
+                                                                            class="node__parameters_separator">,</span>
+                                                                    null<span
+                                                                            class="node__parameters_separator">,</span>
+                                                                </div>
+                                                                <div class="tree__strut">&nbsp;</div>
+                                                                <div class="node__stats">367ms</div>
+                                                            </div>
+                                                        </a><a class="node node__leaf"
+                                                               href="#behaviors/2c326d6fd7395f8c955a78fd036582ac/e5fc41def72175d7/">
+                                                            <div class="node-title" data-uid="e5fc41def72175d7"
+                                                                 data-parentuid="2c326d6fd7395f8c955a78fd036582ac">
+                                                                <div class="node__anchor">
+                                                                    <span class="fa fa-check-circle fa-fw text_status_passed fa-lg"
+                                                                          data-tooltip="Passed"></span>
+                                                                </div>
+                                                                <div class="node__order">#3</div>
+                                                                <div class="node__name">
+                                                                    testOne
+                                                                </div>
+                                                                <div class="node__flaky">
+                                                                    <span class="fa fa-bomb [object Object]"
+                                                                          data-tooltip="Test is flaky"></span>
+                                                                </div>
+
+                                                                <div class="node__parameters long-line line-ellipsis">
+                                                                    <span>&nbsp;</span>
+                                                                    jkasdkjas jkfbasdjkfb jlasbdfj kajsndkjan JKDNJaksn
+                                                                    da daskjdb jkansdkjn aklsNDK aklsd kajsBDKJanjks
+                                                                    dnkjasnBJKD JKAsnd kla naskjdbkjs DJKASN KJDNKJ
+                                                                    ANSKLD a dsdnfkjsdnJFKNASJKFNKJ SANDFJK ASDNLKFN
+                                                                    ASKLDF AJKSDNLK Asjdklajskl
+                                                                    djkasBFKJsdbnfkladsnklfmdskl fnasdmnf sDFKASBDKJFN
+                                                                    AKJSDNFKJ ANSDJKFNJK SADNKLFNASDKL NFKJASDNF
+                                                                    basdljfb asbdfmb asdljbfl sabdlnfblkasd blfkbasdlk
+                                                                    fbknasdbkfl as<span
+                                                                            class="node__parameters_separator">,</span>
+                                                                    jkasdbkfj asdkjlf jksadbfjnbsnfjksdfkl jdksfghjegkfn
+                                                                    kasfm anskdfnkasf<span
+                                                                            class="node__parameters_separator">,</span>
+                                                                    kjb jabsjfdb ajksnbdfk nasjkdfba kdsnbknasdn
+                                                                    kjfsdlfn kjasd f nakls dfnasdf<span
+                                                                            class="node__parameters_separator">,</span>
+                                                                    njkasndka bsanf asbdfbk jsadnf;kasnjdfb sadkfnkadjs
+                                                                    nf;kas ndf;kjasdf<span
+                                                                            class="node__parameters_separator">,</span>
+                                                                    kjnjdnfksdf sdf<span
+                                                                            class="node__parameters_separator">,</span>
+                                                                </div>
+                                                                <div class="tree__strut">&nbsp;</div>
+                                                                <div class="node__stats">352ms</div>
+                                                            </div>
+                                                        </a><a class="node node__leaf"
+                                                               href="#behaviors/2c326d6fd7395f8c955a78fd036582ac/2e05cf293e3c5414/">
+                                                            <div class="node-title" data-uid="2e05cf293e3c5414"
+                                                                 data-parentuid="2c326d6fd7395f8c955a78fd036582ac">
+                                                                <div class="node__anchor">
+                                                                    <span class="fa fa-question-circle fa-fw text_status_unknown fa-lg"
+                                                                          data-tooltip="Unknown"></span>
+                                                                </div>
+                                                                <div class="node__order">#4</div>
+                                                                <div class="node__name">
+                                                                    testThree
+                                                                </div>
+                                                                <div class="node__flaky">
+                                                                    <span class="fa fa-bomb [object Object]"
+                                                                          data-tooltip="Test is flaky"></span>
+                                                                </div>
+                                                                <div class="tree__strut">&nbsp;</div>
+                                                                <div class="node__stats">382ms</div>
+                                                            </div>
+                                                        </a><a class="node node__leaf"
+                                                               href="#behaviors/2c326d6fd7395f8c955a78fd036582ac/63c1985a7bf60606/">
+                                                            <div class="node-title" data-uid="63c1985a7bf60606"
+                                                                 data-parentuid="2c326d6fd7395f8c955a78fd036582ac">
+                                                                <div class="node__anchor">
+                                                                    <span class="fa fa-check-circle fa-fw text_status_passed fa-lg"
+                                                                          data-tooltip="Passed"></span>
+                                                                </div>
+                                                                <div class="node__order">#1</div>
+                                                                <div class="node__name">
+                                                                    testTwo
+                                                                </div>
+                                                                <div class="node__flaky">
+                                                                    <span class="fa fa-bomb [object Object]"
+                                                                          data-tooltip="Test is flaky"></span>
+                                                                </div>
+                                                                <div class="tree__strut">&nbsp;</div>
+                                                                <div class="node__stats">9ms</div>
+                                                            </div>
+                                                        </a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="node">
+                                            <div class="node-title long-line" data-uid="7ff2c9216b8e7ea17339ed6c1a4491ed">
+                                                <span class="node__arrow block__arrow">
+                                                    <span class="angle fa fa-angle-right fa-fw fa-lg"></span>
+                                                </span>
+                                                <div class="node__name">
+                                                    SuccessStory
+                                                </div>
+                                                <div class="tree__strut">&nbsp;</div>
+                                                <span class="node__stats">
+                                                    <span class="badge badge-default badge-roundless label_status_passed">2</span>
+                                                </span>
+                                            </div>
+
+                                            <div class="node-children">
+                                                <a class="node node__leaf" href="#behaviors/7ff2c9216b8e7ea17339ed6c1a4491ed/7eca6cf3a616c5fc/">
+                                                    <div class="node-title" data-uid="7eca6cf3a616c5fc"
+                                                         data-parentuid="7ff2c9216b8e7ea17339ed6c1a4491ed">
+                                                        <div class="node__anchor">
+                                                            <span class="fa fa-check-circle fa-fw text_status_passed fa-lg"
+                                                                  data-tooltip="Passed"></span>
+                                                        </div>
+                                                        <div class="node__order">#1</div>
+                                                        <div class="node__name">
+                                                            testPassed
+                                                        </div>
+                                                        <div class="node__flaky">
+                                                            <span class="fa fa-bomb [object Object]"
+                                                                  data-tooltip="Test is flaky"></span>
+                                                        </div>
+                                                        <div class="tree__strut">&nbsp;</div>
+                                                        <div class="node__stats">20s 367ms</div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <a class="node node__leaf" href="#behaviors/b1a8273437954620fa374b796ffaacdd/670af0abb2388f81/">
+                                            <div class="node-title" data-uid="670af0abb2388f81"
+                                                 data-parentuid="b1a8273437954620fa374b796ffaacdd">
+                                                <div class="node__anchor">
+                                                    <span class="fa fa-exclamation-circle fa-fw text_status_broken fa-lg"
+                                                          data-tooltip="Broken"></span>
+                                                </div>
+                                                <div class="node__order">#2</div>
+                                                <div class="node__name">
+                                                    BeforeClassFailTest
+                                                </div>
+                                                <div class="node__flaky">
+                                                    <span class="fa fa-bomb [object Object]"
+                                                          data-tooltip="Test is flaky"></span>
+                                                </div>
+                                                <div class="tree__strut">&nbsp;</div>
+                                                <div class="node__stats">9ms</div>
+                                            </div>
+                                        </a>
+                                        <a class="node node__leaf" href="#behaviors/b1a8273437954620fa374b796ffaacdd/a01acb2ac164475a/">
+                                            <div class="node-title" data-uid="a01acb2ac164475a"
+                                                 data-parentuid="b1a8273437954620fa374b796ffaacdd">
+                                                <div class="node__anchor">
+                                                    <span class="fa fa-exclamation-circle fa-fw text_status_broken fa-lg"
+                                                          data-tooltip="Broken"></span>
+                                                </div>
+                                                <div class="node__order">#8</div>
+                                                <div class="node__name">
+                                                    brokenSimpleTest
+                                                </div>
+                                                <div class="node__flaky">
+                                                    <span class="fa fa-bomb [object Object]"
+                                                          data-tooltip="Test is flaky"></span>
+                                                </div>
+                                                <div class="tree__strut">&nbsp;</div>
+                                                <div class="node__stats">3ms</div>
+                                            </div>
+                                        </a>
+                                        <a class="node node__leaf" href="#behaviors/b1a8273437954620fa374b796ffaacdd/60c9c986bee6ef5/">
+                                            <div class="node-title" data-uid="60c9c986bee6ef5"
+                                                 data-parentuid="b1a8273437954620fa374b796ffaacdd">
+                                                <div class="node__anchor">
+                                                    <span class="fa fa-times-circle fa-fw text_status_failed fa-lg"
+                                                          data-tooltip="Failed"></span>
+                                                </div>
+                                                <div class="node__order">#7</div>
+                                                <div class="node__name">
+                                                    failedSimpleTest
+                                                </div>
+                                                <div class="node__flaky node__flaky_shown">
+                                                    <span class="fa fa-bomb [object Object]"
+                                                          data-tooltip="Test is flaky"></span>
+                                                </div>
+                                                <div class="tree__strut">&nbsp;</div>
+                                                <div class="node__stats">1ms</div>
+                                            </div>
+                                        </a>
+                                        <a class="node node__leaf" href="#behaviors/b1a8273437954620fa374b796ffaacdd/82c9f7ff3e74ca00/">
+                                            <div class="node-title" data-uid="82c9f7ff3e74ca00"
+                                                 data-parentuid="b1a8273437954620fa374b796ffaacdd">
+                                                <div class="node__anchor">
+                                                    <span class="fa fa-exclamation-circle fa-fw text_status_broken fa-lg"
+                                                          data-tooltip="Broken"></span>
+                                                </div>
+                                                <div class="node__order">#4</div>
+                                                <div class="node__name">
+                                                    lotOfStepsTest
+                                                </div>
+                                                <div class="node__flaky">
+                                                    <span class="fa fa-bomb [object Object]"
+                                                          data-tooltip="Test is flaky"></span>
+                                                </div>
+                                                <div class="tree__strut">&nbsp;</div>
+                                                <div class="node__stats">61ms</div>
+                                            </div>
+                                        </a>
+                                        <a class="node node__leaf" href="#behaviors/b1a8273437954620fa374b796ffaacdd/c65ee33ed96b80bf/">
+                                            <div class="node-title" data-uid="c65ee33ed96b80bf"
+                                                 data-parentuid="b1a8273437954620fa374b796ffaacdd">
+                                                <div class="node__anchor">
+                                                    <span class="fa fa-check-circle fa-fw text_status_passed fa-lg"
+                                                          data-tooltip="Passed"></span>
+                                                </div>
+                                                <div class="node__order">#1</div>
+                                                <div class="node__name">
+                                                    open widget page
+                                                </div>
+                                                <div class="node__flaky">
+                                                    <span class="fa fa-bomb [object Object]"
+                                                          data-tooltip="Test is flaky"></span>
+                                                </div>
+                                                <div class="tree__strut">&nbsp;</div>
+                                                <div class="node__stats">11s 945ms</div>
+                                            </div>
+                                        </a>
+                                        <a class="node node__leaf" href="#behaviors/b1a8273437954620fa374b796ffaacdd/577552b24088177e/">
+                                            <div class="node-title" data-uid="577552b24088177e"
+                                                 data-parentuid="b1a8273437954620fa374b796ffaacdd">
+                                                <div class="node__anchor">
+                                                    <span class="fa fa-minus-circle fa-fw text_status_skipped fa-lg"
+                                                          data-tooltip="Skipped"></span>
+                                                </div>
+                                                <div class="node__order">#9</div>
+                                                <div class="node__name">
+                                                    skippedSimpleTest
+                                                </div>
+                                                <div class="node__flaky">
+                                                    <span class="fa fa-bomb [object Object]"
+                                                          data-tooltip="Test is flaky"></span>
+                                                </div>
+                                                <div class="tree__strut">&nbsp;</div>
+                                                <div class="node__stats">1ms</div>
+                                            </div>
+                                        </a>
+                                        <a class="node node__leaf" href="#behaviors/b1a8273437954620fa374b796ffaacdd/73e113483fb3eb87/">
+                                            <div class="node-title" data-uid="73e113483fb3eb87"
+                                                 data-parentuid="b1a8273437954620fa374b796ffaacdd">
+                                                <div class="node__anchor">
+                                                    <span class="fa fa-times-circle fa-fw text_status_failed fa-lg"
+                                                          data-tooltip="Failed"></span>
+                                                </div>
+                                                <div class="node__order">#3</div>
+                                                <div class="node__name">
+                                                    Test with long assertion text
+                                                </div>
+                                                <div class="node__flaky">
+                                                    <span class="fa fa-bomb [object Object]"
+                                                          data-tooltip="Test is flaky"></span>
+                                                </div>
+                                                <div class="tree__strut">&nbsp;</div>
+                                                <div class="node__stats">661ms</div>
+                                            </div>
+                                        </a>
+                                        <a class="node node__leaf" href="#behaviors/b1a8273437954620fa374b796ffaacdd/200c6443fc7f7c29/">
+                                            <div class="node-title" data-uid="200c6443fc7f7c29"
+                                                 data-parentuid="b1a8273437954620fa374b796ffaacdd">
+                                                <div class="node__anchor">
+                                                    <span class="fa fa-check-circle fa-fw text_status_passed fa-lg"
+                                                          data-tooltip="Passed"></span>
+                                                </div>
+                                                <div class="node__order">#6</div>
+                                                <div class="node__name">
+                                                    test_pass
+                                                </div>
+                                                <div class="node__flaky">
+                                                    <span class="fa fa-bomb [object Object]"
+                                                          data-tooltip="Test is flaky"></span>
+                                                </div>
+                                                <div class="tree__strut">&nbsp;</div>
+                                                <div class="node__stats">3ms</div>
+                                            </div>
+                                        </a>
+                                        <a class="node node__leaf" href="#behaviors/b1a8273437954620fa374b796ffaacdd/e5528e747f8fd9d6/">
+                                            <div class="node-title" data-uid="e5528e747f8fd9d6"
+                                                 data-parentuid="b1a8273437954620fa374b796ffaacdd">
+                                                <div class="node__anchor">
+                                                    <span class="fa fa-exclamation-circle fa-fw text_status_broken fa-lg"
+                                                          data-tooltip="Broken"></span>
+                                                </div>
+                                                <div class="node__order">#5</div>
+                                                <div class="node__name">
+                                                    test_raise_cyrilling (невероятный тест кодировки!)
+                                                </div>
+                                                <div class="node__flaky">
+                                                    <span class="fa fa-bomb [object Object]"
+                                                          data-tooltip="Test is flaky"></span>
+                                                </div>
+                                                <div class="tree__strut">&nbsp;</div>
+                                                <div class="node__stats">98ms</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 left-separator">
+                    <!-- BEGIN Portlet PORTLET-->
+                    <div class="portlet">
+                        <div class="portlet-title">
+                            <div class="caption"><i class="fa fa-angle-right"></i>#1 - Case 1</div>
+                        </div>
+                        <div class="portlet-body">
+                            <h4>Предусловия</h4>
+                            <ol>
+                                <li>Есть оплаченный ордер</li>
+                                <li>Есть активный райтер</li>
+                            </ol>
+                            <h4>Шаги</h4>
+                            <ol>
+                                <li>Залогиниться райтером</li>
+                                <li>Взять ордер в работу</li>
+                                <li>Догрузить файл</li>
+                            </ol>
+                            <h4>Результат</h4>
+                            <p>
+                                Ордер должен перейти в статус Completed
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END PAGE CONTENT INNER -->
+    </div>
+</div>
+
+
+<?php $this->inlineScript()->captureStart();
+echo <<<JS
+$(document).ready(function(){
+    $('.node-title').click(function() {
+        $(this).find('.angle').toggleClass('fa-angle-right fa-angle-down');
+        $(this).parent().children('.node-children').toggle();
+    });
+});
+JS;
+$this->inlineScript()->captureEnd() ?>

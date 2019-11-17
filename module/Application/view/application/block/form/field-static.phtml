@@ -1,0 +1,26 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+
+$label = $viewModel->getVariable('label');
+if (!$label) {
+    $label = ucfirst($viewModel->getVariable('name', ''));
+}
+
+$value = $viewModel->getVariable('value');
+
+$labelWidthClass = $viewModel->getVariable('label-width-class', 'col-md-3');
+$inputWidthClass = $viewModel->getVariable('input-width-class', 'col-md-5');
+
+$hide = $viewModel->getVariable('hide');
+if ($hide) {
+    $hide = 'hide';
+}
+$elementId = 'form-element-' . str_replace(' ', '-', strtolower($label));
+?>
+<div class="form-group <?= $hide ?>" id="<?= $elementId ?>">
+    <label class="<?=$labelWidthClass?> control-label"><?= $label ?></label>
+    <div class="<?= $inputWidthClass ?>">
+        <p class="form-control-static"> <?=$value?> </p>
+    </div>
+</div>

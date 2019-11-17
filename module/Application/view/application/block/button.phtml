@@ -1,0 +1,22 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$color = $viewModel->getVariable('color', 'default');
+$size = $viewModel->getVariable('size');
+$class = $viewModel->getVariable('class');
+if ($size !== null) {
+    $size = "btn-$size";
+}
+
+$icon = $viewModel->getVariable('icon');
+$text = $viewModel->getVariable('text', 'Default');
+$elementId = 'form-element-' . str_replace(' ', '-', strtolower($text));
+$id = $viewModel->getVariable('id');
+
+?>
+<button class="btn btn-<?= $color ?> <?= $size ?> <?= $class ?>" type="button" data-id="<?= $id ?>">
+    <?php if ($icon !== null): ?>
+        <i class="fa <?= $icon ?>"></i>
+    <?php endif; ?>
+    <?= $text ?>
+</button>

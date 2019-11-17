@@ -1,0 +1,10 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$buttons = $viewModel->getChildren();
+?>
+<div class="page-toolbar">
+    <div class="btn-group" style="margin-top:13px;">
+        <?php foreach ($buttons as $view) echo $this->render($view); ?>
+    </div>
+</div>

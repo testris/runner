@@ -1,0 +1,64 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+
+$errors = $viewModel->getVariable('errors', []);
+$label = $viewModel->getVariable('label');
+if (!$label) {
+    $label = ucfirst($viewModel->getVariable('name', 'Input text'));
+}
+$name = $viewModel->getVariable('name');
+$placeholder = $viewModel->getVariable('placeholder');
+if (!$placeholder) {
+    $placeholder = 'Enter ' . strtolower($label);
+}
+$value = $viewModel->getVariable('value');
+$class = $viewModel->getVariable('class');
+$disabled = '';
+$disabled = $viewModel->getVariable('disabled');
+if ($disabled) {
+    $disabled = 'disabled=""';
+}
+$readonly = $viewModel->getVariable('readonly');
+if ($readonly) {
+    $readonly = 'readonly=""';
+}
+$maxLength = $viewModel->getVariable('maxLength');
+if ($maxLength) {
+    $maxLength = 'maxlength="' . $maxLength . '"';
+}
+
+$inputWidthClass = $viewModel->getVariable('input-width-class', 'col-md-5');
+
+$hide = $viewModel->getVariable('hide');
+if ($hide) {
+    $hide = 'hide';
+}
+$elementId = 'form-element-' . str_replace(' ', '-', strtolower($label));
+?>
+<div class="form-group <?= (!empty($errors)) ? 'has-error' : ''; ?> <?= $hide ?>" id="<?= $elementId ?>">
+    <label class="col-md-3 control-label"><?= $label ?></label>
+    <div class="<?= $inputWidthClass ?>">
+        <div class="input-group">
+            <?= $this->addon ?>
+            <input type="text"
+                   name="<?=$name?>"
+                   class="form-control <?=$class?>"
+                   <?=$readonly?>
+                   <?=$disabled?>
+                   placeholder="<?= $placeholder ?>"
+                   value="<?=$value?>">
+            <?php if ($disabled): ?>
+                <input type="hidden" name="<?= $name ?>" value="<?=$value?>">
+            <?php endif; ?>
+        </div>
+        <?php if (!empty($errors)): ?>
+            <?php if (is_array($errors)): ?>
+                <span class="help-block"><?=implode('<br/> ', $errors);?></span>
+            <?php else: ?>
+                <span class="help-block"><?=$errors?></span>
+            <?php endif; ?>
+        <?php endif; ?>
+    </div>
+    <?= $this->linkToLog ?>
+</div>

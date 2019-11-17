@@ -1,0 +1,89 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+
+$allErrors = $viewModel->getVariable('errors', []);
+$label = $viewModel->getVariable('label');
+if (!$label) {
+    $label = ucfirst($viewModel->getVariable('name', 'Input text'));
+}
+$name = $viewModel->getVariable('name');
+$placeholder = $viewModel->getVariable('placeholder');
+if (!$placeholder) {
+    $placeholder = 'Enter ' . strtolower($label);
+}
+$value = $viewModel->getVariable('value');
+$valueType = $viewModel->getVariable('valueType');
+if (is_null($valueType)) {
+    $valueType = 0;
+}
+$class = $viewModel->getVariable('class');
+$options = $viewModel->getVariable('options');
+$disabled = '';
+$disabled = $viewModel->getVariable('disabled');
+if ($disabled) {
+    $disabled = 'disabled=""';
+}
+$readonly = $viewModel->getVariable('readonly');
+if ($readonly) {
+    $readonly = 'readonly=""';
+}
+$valueNames = $viewModel->getVariable('valueNames', []);
+
+$errors = [];
+foreach ($valueNames as $valueName) {
+    if (!empty($allErrors[$valueName])) {
+        $errors += $allErrors[$valueName];
+    }
+}
+$labelWidthClass = $viewModel->getVariable('label-width-class', 'col-md-3');
+$inputWidthClass = $viewModel->getVariable('input-width-class', 'col-md-5');
+?>
+<div class="form-group <?= (!empty($errors)) ? 'has-error' : ''; ?>">
+    <label class="<?=$labelWidthClass?> control-label"><?= $label ?></label>
+    <div class="<?=$inputWidthClass?>">
+        <div class="input-group">
+            <input type="text"
+                   name="<?=$name?>"
+                   id="<?=$name?>-control"
+                   class="form-control <?=$class?>"
+                   <?=$readonly?>
+                   <?=$disabled?>
+                   placeholder="<?= $placeholder ?>"
+                   value="<?=$value?>">
+            <div class="input-group-btn">
+                <button type="button" class="btn grey-cascade dropdown-toggle <?=$name?>-option-btn" data-toggle="dropdown" aria-expanded="false">
+                    <span><?=$options[$valueType]?></span>
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right">
+                    <?php foreach($options as $optionId => $optionName): ?>
+                        <li>
+                            <a href="javascript:;" class="<?=$name?>-option" data-id="<?=$optionId?>"><?=$optionName?></a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <!-- /btn-group -->
+        </div>
+        <?php if (!empty($errors)): ?>
+            <?php if (is_array($errors)): ?>
+                <span class="help-block"><?=implode('<br/> ', $errors);?></span>
+            <?php else: ?>
+                <span class="help-block"><?=$errors?></span>
+            <?php endif; ?>
+        <?php endif; ?>
+    </div>
+    <?= $this->linkToLog ?>
+</div>
+
+<?php $this->inlineScript()->captureStart();
+echo <<<JS
+$(document).ready(function(){
+    $('.$name-option').click(function() {
+        $('.$name-option-btn span').text($(this).text());
+        $('#$name-control').trigger('option:change', [$(this).data('id')]);
+    });
+});
+JS;
+$this->inlineScript()->captureEnd() ?>

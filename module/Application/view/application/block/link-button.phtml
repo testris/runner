@@ -1,0 +1,40 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$color = $viewModel->getVariable('color', 'default');
+$size = $viewModel->getVariable('size');
+$disabled = $viewModel->getVariable('disabled', false);
+if ($size !== null) {
+    $size = "btn-$size";
+}
+$href = '#';
+if ($viewModel->getVariable('url')) {
+    $href = $viewModel->getVariable('url');
+} else {
+    $routeName = $viewModel->getVariable('routeName');
+    if ($routeName !== null) {
+        $routeParams = $viewModel->getVariable('routeParams', []);
+        $routeOptions = $viewModel->getVariable('routeOptions', []);
+        $href = $this->url($routeName, $routeParams, $routeOptions);
+    }
+}
+
+$target = $viewModel->getVariable('target');
+$icon = $viewModel->getVariable('icon');
+$text = $viewModel->getVariable('text', 'Default');
+$elementId = 'form-element-' . str_replace(' ', '-', strtolower($text));
+
+$aclName = $viewModel->getVariable('aclName');
+$aclAction = $viewModel->getVariable('aclAction', null);
+//if ($text == 'Edit') die(var_dump($disabled));
+?>
+
+<?php if (!$aclName || ($aclName /*&& Acl::IsAllowed($aclName, $aclAction)*/)):?>
+    <a class="btn btn-<?= $color ?> <?= $size ?> <?=($disabled)?'disabled':''?>" id="<?= $elementId ?>"
+       href="<?= $href ?>" target="<?= $target ? $target : '_self' ?>">
+        <?php if ($icon !== null): ?>
+            <i class="fa <?= $icon ?>"></i>&nbsp;
+        <?php endif; ?>
+        <?= $text ?>
+    </a>
+<?php endif; ?>

@@ -1,0 +1,13 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+
+$healthCheckDate = strtotime($viewModel->getVariable('value'));
+?>
+<td align="center">
+    <?php if (time() - $healthCheckDate < 300): ?>
+        <span class="text-success icon-check font-lg bold margin-top-10"></span>
+    <?php else: ?>
+        <span class="text-danger icon-close font-lg bold margin-top-10"></span>
+    <?php endif; ?>
+</td>

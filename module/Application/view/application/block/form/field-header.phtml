@@ -1,0 +1,15 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+
+$text = $viewModel->getVariable('text');
+$size = $viewModel->getVariable('size', 4);
+$hr = $viewModel->getVariable('hr', false);
+?>
+
+<?php if($hr): ?>
+<hr>
+<?php endif; ?>
+
+<h<?= $size ?>><?= $text ?></h<?= $size ?>>
+

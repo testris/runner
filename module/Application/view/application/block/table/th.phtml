@@ -1,0 +1,9 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+?>
+<th
+    width="<?= $viewModel->getVariable('width') ?>"
+    class="bg-default bg-font-default text-<?= $viewModel->getVariable('align', 'left') ?>"
+    style="<?= $viewModel->getVariable('style') ?>"
+><strong><?= $viewModel->getVariable('value') ?></strong></th>

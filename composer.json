@@ -1,0 +1,73 @@
+{
+    "name": "test/test-runner",
+    "description": "test runner for devellar",
+    "type": "project",
+    "homepage": "http://tr.uncomp.com/",
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^7.1",
+        "php-amqplib/php-amqplib": "2.5.*",
+        "sebaks/view": "dev-master",
+        "sebaks/zend-mvc-controller": "dev-master",
+        "sensiolabs/ansi-to-html": "^1.1",
+        "symfony/console": "4.1.*",
+        "t4web/crud": "1.2.*",
+        "t4web/default-service": "1.1.*",
+        "t4web/domain-module": "1.4.*",
+        "t4web/event-subscriber": "dev-master",
+        "zendframework/zend-authentication": "^2.6",
+        "zendframework/zend-cache": "^2.8",
+        "zendframework/zend-db": "2.9.*",
+        "zendframework/zend-inputfilter": "2.8.*",
+        "zendframework/zend-mail": "^2.10",
+        "zendframework/zend-mvc": "3.1.*",
+        "zendframework/zend-paginator": "2.8.*",
+        "zendframework/zend-session": "2.8.*",
+        "zfcampus/zf-development-mode": "3.2.*"
+    },
+    "require-dev": {
+        "zendframework/zend-developer-tools": "1.2.*",
+        "zendframework/zend-test": "3.2.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Application\\": "module/Application/src/",
+            "Authentication\\": "module/Authentication/src/",
+            "Console\\": "module/Console/src/",
+            "Email\\": "module/Email/src/",
+            "Hosts\\": "module/Hosts/src/",
+            "Jenkins\\": "module/Jenkins/src/",
+            "Migrations\\": "module/Migrations/src/",
+            "RabbitMq\\": "module/RabbitMq/src/",
+            "TestCase\\": "module/TestCase/src/",
+            "UseCase\\": "module/UseCase/src/",
+            "TestResult\\": "module/TestResult/src/",
+            "TestRun\\": "module/TestRun/src/",
+            "Users\\": "module/Users/src/",
+            "Sites\\": "module/Sites/src/",
+            "Workers\\": "module/Workers/src/",
+            "Data\\Migrations\\": "data/migrations/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ApplicationTest\\": "module/Application/test/"
+        }
+    },
+    "extra": [],
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "development-disable": "zf-development-mode disable",
+        "development-enable": "zf-development-mode enable",
+        "development-status": "zf-development-mode status",
+        "post-create-project-cmd": [
+            "@development-enable"
+        ],
+        "serve": "php -S 0.0.0.0:8080 -t public public/index.php",
+        "test": "phpunit"
+    }
+}

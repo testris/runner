@@ -1,0 +1,9 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+
+$healthCheckDate = strtotime($viewModel->getVariable('value'));
+?>
+<td title="<?=date('Y-m-d H:i:s', $healthCheckDate)?>">
+    <?=\Application\Helper\RelativeTime::convert($healthCheckDate)?>
+</td>

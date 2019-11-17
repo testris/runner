@@ -1,0 +1,10 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+
+$value = $viewModel->getVariable($viewModel->getVariable('varName', 'value'));
+$value = nl2br($value);
+?>
+<td align="<?= $viewModel->getVariable('align', 'left') ?>" style="<?= $viewModel->getVariable('style') ?>">
+    <?= $value ?>
+</td>

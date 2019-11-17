@@ -1,0 +1,17 @@
+<?php
+/** @var \TestRun\ViewModel\ResultsViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+
+$passed = $viewModel->getVariable(\TestResult\Entity\TestResultStatuses::PASSED);
+$failed = $viewModel->getVariable(\TestResult\Entity\TestResultStatuses::FAILED);
+$broken = $viewModel->getVariable(\TestResult\Entity\TestResultStatuses::BROKEN);
+$untested = $viewModel->getVariable(\TestResult\Entity\TestResultStatuses::UNTESTED);
+?>
+<td align="left">
+    <span class="node__stats">
+        <span class="badge badge-default badge-roundless label_status_passed"><?=$passed?></span>
+        <span class="badge badge-default badge-roundless label_status_failed"><?=$failed?></span>
+        <span class="badge badge-default badge-roundless label_status_broken"><?=$broken?></span>
+        <span class="badge badge-default badge-roundless label_status_unknown"><?=$untested?></span>
+    </span>
+</td>

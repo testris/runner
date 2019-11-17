@@ -1,0 +1,12 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+
+$name = $viewModel->getVariable('name');
+$value = $viewModel->getVariable('value');
+if (is_null($value)) {
+    $value = $viewModel->getVariable('defaultValue');
+}
+$class = $viewModel->getVariable('class');
+?>
+<input type="hidden" id="<?=$name?>-control" name="<?=$name?>" value="<?=$value?>" class="<?=$class?>">

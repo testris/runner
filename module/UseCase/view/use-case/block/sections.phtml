@@ -1,0 +1,78 @@
+<?php
+$this->headScript()->appendFile('/js/use-cases.js');
+
+/** @var \TestCase\ViewModel\SectionsViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$tree = $viewModel->getSectionTree();
+
+
+function renderNode($node, \TestCase\ViewModel\SectionsViewModel $viewModel, $siteId = null) {
+    $nodeOutput = '<div class="node">
+        <div class="node-title long-line">
+            <span class="node__arrow block__arrow"><span class="angle fa fa-angle-down fa-fw fa-lg"></span></span>
+            <div class="node__name">%s</div>
+        </div>
+        <div class="node-children" style="display: block;">%s</div>
+    </div>';
+
+    $output = '';
+    foreach ($node as $item) {
+
+        if (isset($item['siteId'])) {
+            $siteId = $item['siteId'];
+        }
+
+        if (isset($item['children'])) {
+            $children = renderNode($item['children'], $viewModel, $siteId);
+        } else {
+            $children = '';
+        }
+
+        $cases = $viewModel->getCasesBySectionId($item['id'], $siteId);
+
+        foreach ($cases as $case) {
+            $children .= renderCase($case);
+        }
+
+        $output .= sprintf($nodeOutput, $item['name'], $children);
+    }
+
+    return $output;
+}
+
+function renderCase(\UseCase\Entity\UseCase $case) {
+    $output = '<a class="node node__leaf" href="javascript:;">
+        <div class="node-title" data-id="%1$s" data-priority="%5$s">
+            %4$s
+            <div class="node__order">#%1$s</div>
+            <div class="node__name">%2$s</div>
+            <div style="display:none;" class="node__steps" data-description="%3$s"></div>
+        </div>
+    </a>';
+
+    if ($case->getPriority() == \UseCase\Entity\UseCasePriority::HIGH) {
+        $status = '<span class="label label-danger rounded-3">High</span>';
+    } else if ($case->getPriority() == \UseCase\Entity\UseCasePriority::MEDIUM) {
+        $status = '<span class="label label-success rounded-3">Mid</span>';
+    } else {
+        $status = '<span class="label label-info rounded-3">Low</span>';
+    }
+
+    return sprintf(
+        $output,
+        $case->getId(), // 1
+        htmlspecialchars($case->getTitle()), // 2
+        htmlspecialchars($case->getDescription()), // 3
+        $status, // 4
+        $case->getPriority() // 5
+    );
+}
+?>
+
+<div class="tree__content">
+    <div class="tree">
+        <div class="tree__content">
+            <?=renderNode($tree, $viewModel)?>
+        </div>
+    </div>
+</div>

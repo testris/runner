@@ -1,0 +1,78 @@
+<?php
+/** @var \TestRun\ViewModel\OutputViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$icon = $viewModel->getVariable('icon');
+/** @var \TestRun\Entity\TestRun $testRun */
+$testRun = $viewModel->getVariable('result');
+$converter = new SensioLabs\AnsiConverter\AnsiToHtmlConverter();
+$testsOutput = $viewModel->getTestsOutput();
+?>
+<div class="page-head">
+    <div class="container-fluid">
+        <!-- BEGIN PAGE TITLE -->
+        <div class="page-title">
+            <h1>
+                <i class="fa <?= $viewModel->getVariable('icon') ?>"></i>
+                <?= $viewModel->getVariable('title', 'List of entities') ?>
+            </h1>
+        </div>
+        <!-- END PAGE TITLE -->
+        <?=$this->pageToolbar?>
+    </div>
+</div>
+<div class="page-content">
+    <div class="container-fluid">
+        <!-- BEGIN PAGE CONTENT INNER -->
+        <div class="page-content-inner">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- BEGIN Portlet PORTLET-->
+                    <div class="portlet">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <span class="caption-subject bold uppercase"> Jenkins output</span>
+                            </div>
+
+                            <div class="tools">
+<!--                                <a href="" class="collapse" data-original-title="" title=""> </a>-->
+<!--                                <a href="" class="reload" data-original-title="" title=""> </a>-->
+                                <a href="" class="fullscreen" data-original-title="" title=""> </a>
+                            </div>
+<!--                            <div class="actions">-->
+<!--                                <a href="javascript:;" class="btn btn-circle btn-default"><i class="fa fa-sort-amount-asc"></i> See full log</a>-->
+<!--                            </div>-->
+                        </div>
+                        <div class="portlet-body">
+                            <pre class="short"><?=$viewModel->cut($testRun->getJenkinsOutput())?></pre>
+                            <pre class="long" style="display:none;"><?=$testRun->getJenkinsOutput()?></pre>
+                        </div>
+                    </div>
+                </div>
+                <?php foreach ($viewModel->getTestsOutput() as $output) { ?>
+                    <div class="col-md-6">
+                        <div class="portlet">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <span class="caption-subject bold uppercase"> Tests output <?=$output['ip']?></span>
+                                </div>
+                                <div class="tools">
+                                    <!--                                <a href="" class="collapse" data-original-title="" title=""> </a>-->
+                                    <!--                                <a href="" class="reload" data-original-title="" title=""> </a>-->
+                                    <a href="" class="fullscreen" data-original-title="" title=""> </a>
+                                </div>
+                                <!--                            <div class="actions">-->
+                                <!--                                <a href="javascript:;" class="btn btn-circle btn-default"><i class="fa fa-sort-amount-asc"></i> See full log</a>-->
+                                <!--                            </div>-->
+                            </div>
+                            <div class="portlet-body">
+                                <pre class="short" style="background-color: black;"><?=$viewModel->cut($converter->convert($output['text']))?></pre>
+                                <pre class="long" style="display:none;background-color: black;"><?=$converter->convert($output['text'])?></pre>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+        <!-- END PAGE CONTENT INNER -->
+    </div>
+</div>

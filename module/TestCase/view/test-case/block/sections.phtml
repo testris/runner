@@ -1,0 +1,264 @@
+<?php
+$this->headScript()->appendFile('/js/cases.js');
+
+/** @var \TestCase\ViewModel\SectionsViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$tree = $viewModel->getSectionTree();
+
+function renderNode($node, \TestCase\ViewModel\SectionsViewModel $viewModel, $siteId = null) {
+    $nodeOutput = '<div class="node">
+        <div class="node-title long-line">
+            <span class="node__arrow block__arrow"><span class="angle fa fa-angle-right fa-fw fa-lg"></span></span>
+            <div class="node__name">%s</div>
+        </div>
+        <div class="node-children">%s</div>
+    </div>';
+
+    $output = '';
+    foreach ($node as $item) {
+
+        if (isset($item['siteId'])) {
+            $siteId = $item['siteId'];
+        }
+
+        if (isset($item['children'])) {
+            $children = renderNode($item['children'], $viewModel, $siteId);
+        } else {
+            $children = '';
+        }
+
+        $cases = $viewModel->getCasesBySectionId($item['id'], $siteId);
+
+        foreach ($cases as $case) {
+            $children .= renderCase($case, $viewModel);
+        }
+
+        $output .= sprintf($nodeOutput, $item['name'], $children);
+    }
+
+    return $output;
+}
+
+function renderCase(
+        \TestCase\Entity\TestCase $case,
+        \TestCase\ViewModel\SectionsViewModel $viewModel
+) {
+    $output = '<a class="node node__leaf" href="javascript:;">
+        <div class="node-title" data-id="%1$s" data-class="%6$s" data-site="%7$s" data-status="%9$s">
+            %8$s
+            <div class="node__order">#%1$s</div>
+            <div class="node__name">%2$s</div>
+            <div style="display:none;" class="node__steps" 
+                data-preconditions="%3$s"
+                data-steps="%4$s"
+                data-result="%5$s"></div>
+        </div>
+    </a>';
+
+    $status = '<div class="node__anchor"><span class="fa fa-check-circle fa-fw text_status_passed fa-lg" data-tooltip="Passed"></span></div>';
+    if ($case->getStatus() == \TestCase\Entity\TestCaseStatuses::DISABLED) {
+        $status = '<div class="node__anchor"><span class="fa fa-ban fa-fw text_status_failed fa-lg" data-tooltip="Disabled"></span></div>';
+    }
+
+    return sprintf(
+        $output,
+        $case->getId(), // 1
+        htmlspecialchars($case->getTitle()), // 2
+        htmlspecialchars($case->getPreconditions()), // 3
+        htmlspecialchars($case->getSteps()), // 4
+        htmlspecialchars($case->getResult()), // 5
+        $case->getAutomatedClass(), // 6
+        $viewModel->getSite($case->getSiteId())->getDomain(), // 7
+        $status, // 8
+        strtolower(\TestCase\Entity\TestCaseStatuses::getNameById($case->getStatus())) // 9
+    );
+}
+?>
+
+<div class="tree__content">
+    <div class="tree">
+        <div class="tree__content">
+            <?=renderNode($tree, $viewModel)?>
+
+            <?php /*
+            <div class="node">
+                <div class="node-title long-line"
+                     data-uid="08fa2875fee9013d8acfbc64e906b5e8">
+                <span class="node__arrow block__arrow"><span
+                            class="angle fa fa-angle-right fa-fw fa-lg"></span></span>
+                    <div class="node__name">
+                        Screenshot
+                    </div>
+                </div>
+
+                <div class="node-children">
+                    <div class="node">
+                        <div class="node-title long-line"
+                             data-uid="fc4546163c916e12f72b7f3ea5deb8cd">
+                        <span class="node__arrow block__arrow"><span
+                                    class="angle fa fa-angle-right fa-fw fa-lg"></span></span>
+                            <div class="node__name">
+                                OtherScreenshot
+                            </div>
+                        </div>
+
+                        <div class="node-children">
+                            <a class="node node__leaf"
+                               href="#behaviors/fc4546163c916e12f72b7f3ea5deb8cd/a5fc7f2bcded5c71/">
+                                <div class="node-title" data-uid="a5fc7f2bcded5c71"
+                                     data-parentuid="fc4546163c916e12f72b7f3ea5deb8cd">
+                                    <div class="node__order">#1</div>
+                                    <div class="node__name">
+                                        Some case
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="node">
+                        <div class="node-title long-line"
+                             data-uid="0b7a8c65441223ee4aecc093714f894e">
+                            <span class="node__arrow block__arrow"><span class="angle fa fa-angle-right fa-fw fa-lg"></span></span>
+                            <div class="node__name">
+                                WebdriverScreenshot
+                            </div>
+                        </div>
+
+                        <div class="node-children">
+                            <a class="node node__leaf"
+                               href="#behaviors/0b7a8c65441223ee4aecc093714f894e/89eb5e28fd4788cd/">
+                                <div class="node-title" data-uid="89eb5e28fd4788cd"
+                                     data-parentuid="0b7a8c65441223ee4aecc093714f894e">
+                                    <div class="node__order">#2</div>
+                                    <div class="node__name">
+                                        Empty text search
+                                    </div>
+                                </div>
+                            </a>
+                            <a class="node node__leaf"
+                                   href="#behaviors/0b7a8c65441223ee4aecc093714f894e/971feececb7eebd8/">
+                                <div class="node-title" data-uid="971feececb7eebd8"
+                                     data-parentuid="0b7a8c65441223ee4aecc093714f894e">
+                                    <div class="node__order">#3</div>
+                                    <div class="node__name">
+                                        Page loading test
+                                    </div>
+                                </div>
+                            </a>
+                            <a class="node node__leaf"
+                                   href="#behaviors/0b7a8c65441223ee4aecc093714f894e/d4577de9db1ccf7e/">
+                                <div class="node-title" data-uid="d4577de9db1ccf7e"
+                                     data-parentuid="0b7a8c65441223ee4aecc093714f894e">
+                                    <div class="node__order">#4</div>
+                                    <div class="node__name">
+                                        Usual search test
+                                    </div>
+                                </div>
+                            </a>
+                            <a class="node node__leaf"
+                                   href="#behaviors/0b7a8c65441223ee4aecc093714f894e/6029f1b69d717e31/">
+                                <div class="node-title" data-uid="6029f1b69d717e31"
+                                     data-parentuid="0b7a8c65441223ee4aecc093714f894e">
+                                    <div class="node__order">#1</div>
+                                    <div class="node__name">
+                                        Wildcard search test
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="node">
+                <div class="node-title long-line" data-uid="7ff2c9216b8e7ea17339ed6c1a4491ed">
+                <span class="node__arrow block__arrow">
+                    <span class="angle fa fa-angle-right fa-fw fa-lg"></span>
+                </span>
+                    <div class="node__name">
+                        SuccessStory
+                    </div>
+                </span>
+                </div>
+
+                <div class="node-children">
+                    <a class="node node__leaf" href="#behaviors/7ff2c9216b8e7ea17339ed6c1a4491ed/7eca6cf3a616c5fc/">
+                        <div class="node-title" data-uid="7eca6cf3a616c5fc"
+                             data-parentuid="7ff2c9216b8e7ea17339ed6c1a4491ed">
+                            <div class="node__order">#1</div>
+                            <div class="node__name">
+                                testPassed
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <a class="node node__leaf" href="#behaviors/b1a8273437954620fa374b796ffaacdd/670af0abb2388f81/">
+                <div class="node-title" data-uid="670af0abb2388f81"
+                     data-parentuid="b1a8273437954620fa374b796ffaacdd">
+                    <div class="node__order">#2</div>
+                    <div class="node__name">
+                        BeforeClassFailTest
+                    </div>
+                </div>
+            </a>
+            <a class="node node__leaf" href="#behaviors/b1a8273437954620fa374b796ffaacdd/60c9c986bee6ef5/">
+                <div class="node-title" data-uid="60c9c986bee6ef5"
+                     data-parentuid="b1a8273437954620fa374b796ffaacdd">
+                    <div class="node__order">#7</div>
+                    <div class="node__name">
+                        failedSimpleTest
+                    </div>
+                </div>
+            </a>
+            <a class="node node__leaf" href="#behaviors/b1a8273437954620fa374b796ffaacdd/82c9f7ff3e74ca00/">
+                <div class="node-title" data-uid="82c9f7ff3e74ca00"
+                     data-parentuid="b1a8273437954620fa374b796ffaacdd">
+                    <div class="node__order">#4</div>
+                    <div class="node__name">
+                        lotOfStepsTest
+                    </div>
+                </div>
+            </a>
+            <a class="node node__leaf" href="#behaviors/b1a8273437954620fa374b796ffaacdd/c65ee33ed96b80bf/">
+                <div class="node-title" data-uid="c65ee33ed96b80bf"
+                     data-parentuid="b1a8273437954620fa374b796ffaacdd">
+                    <div class="node__order">#1</div>
+                    <div class="node__name">
+                        open widget page
+                    </div>
+                </div>
+            </a>
+            <a class="node node__leaf" href="#behaviors/b1a8273437954620fa374b796ffaacdd/577552b24088177e/">
+                <div class="node-title" data-uid="577552b24088177e"
+                     data-parentuid="b1a8273437954620fa374b796ffaacdd">
+                    <div class="node__order">#9</div>
+                    <div class="node__name">
+                        skippedSimpleTest
+                    </div>
+                </div>
+            </a>
+            <a class="node node__leaf" href="#behaviors/b1a8273437954620fa374b796ffaacdd/73e113483fb3eb87/">
+                <div class="node-title" data-uid="73e113483fb3eb87"
+                     data-parentuid="b1a8273437954620fa374b796ffaacdd">
+                    <div class="node__order">#3</div>
+                    <div class="node__name">
+                        Test with long assertion text
+                    </div>
+                </div>
+            </a>
+            */ ?>
+        </div>
+    </div>
+</div>
+
+
+<?php $this->inlineScript()->captureStart();
+echo <<<JS
+// $(document).ready(function(){
+//     $('.node-title').click(function() {
+//         $(this).find('.angle').toggleClass('fa-angle-right fa-angle-down');
+//         $(this).parent().children('.node-children').toggle();
+//     });
+// });
+JS;
+$this->inlineScript()->captureEnd() ?>

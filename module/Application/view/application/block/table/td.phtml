@@ -1,0 +1,23 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+
+$value = $viewModel->getVariable($viewModel->getVariable('varName', 'value'));
+
+$visibleValue = $value;
+$maxStringLength = $viewModel->getVariable('maxStringLength');
+if ($maxStringLength && strlen($value) > $maxStringLength) {
+    $newValue = substr($value, 0, $maxStringLength);
+    if ($newValue < $value) {
+        $visibleValue = $newValue . '...';
+    }
+}
+$titleValue = '';
+if ($visibleValue != $value) {
+    $titleValue = $value;
+}
+$visibleValue = nl2br($visibleValue);
+?>
+<td title="<?= $titleValue ?>" align="<?= $viewModel->getVariable('align', 'left') ?>" style="<?= $viewModel->getVariable('style') ?>">
+    <?= $visibleValue ?>
+</td>

@@ -1,0 +1,82 @@
+<?php
+$viewModel = $this->viewModel()->getCurrent();
+$icon = $viewModel->getVariable('icon');
+?>
+<div class="page-head">
+    <div class="container-fluid">
+        <!-- BEGIN PAGE TITLE -->
+        <div class="page-title">
+            <h1>
+                <i class="fa <?= $viewModel->getVariable('icon') ?>"></i>
+                <?= $viewModel->getVariable('title', 'List of entities') ?>
+            </h1>
+        </div>
+        <!-- END PAGE TITLE -->
+        <?=$this->pageToolbar?>
+    </div>
+</div>
+<div class="page-content">
+    <div class="container-fluid">
+        <!-- BEGIN PAGE CONTENT INNER -->
+        <div class="page-content-inner">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- BEGIN Portlet PORTLET-->
+                    <div class="portlet">
+                        <div class="portlet-title">
+                            <div class="caption"><i class="fa fa-list"></i>Cases</div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="scroller" style="height: 610px;" data-always-visible="1" data-rail-visible1="0" data-handle-color="#D7DCE2">
+                                <?= $this->sections?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 left-separator">
+                    <!-- BEGIN Portlet PORTLET-->
+                    <div class="portlet" id="case-wrapper" style="display: none;">
+                        <div class="portlet-title">
+                            <div class="caption" id="case-title"></div>
+                            <div class="actions">
+                                <a href="javascript:;" id="case-edit-btn" class="btn btn-default btn-sm">
+                                    <i class="fa fa-pencil"></i> Edit
+                                </a>
+                                <a href="#delete-window" id="case-delete-btn" class="btn btn-default btn-sm" data-toggle="modal" data-id="">
+                                    <i class="fa fa-times"></i> Delete
+                                </a>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <p id="case-site" class="margin-bottom-5 text-muted sbold"><i class="fa fa-globe fa-lg"></i> </p>
+                            <p id="case-class" class="margin-bottom-5 text-muted sbold"><i class="fa fa-code fa-lg"></i> </p>
+                            <h4>Предусловия</h4>
+                            <ol id="case-preconditions"></ol>
+                            <h4>Шаги</h4>
+                            <ol id="case-steps"></ol>
+                            <h4>Результат</h4>
+                            <ol id="case-result"></ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END PAGE CONTENT INNER -->
+    </div>
+</div>
+
+<div class="modal fade" id="delete-window" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Вы действительно хотите удалить кейс?</h4>
+            </div>
+            <div class="modal-body">  </div>
+            <div class="modal-footer">
+                <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                <a href="javascript:;" type="button" id="case-delete-btn-confirm" class="btn red">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
