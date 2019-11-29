@@ -1,8 +1,7 @@
 {
-    "name": "test/test-runner",
-    "description": "test runner for devellar",
+    "name": "testris/runner",
+    "description": "Test runner",
     "type": "project",
-    "homepage": "http://tr.uncomp.com/",
     "minimum-stability": "stable",
     "require": {
         "php": "^7.1",

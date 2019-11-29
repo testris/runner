@@ -1,0 +1,12 @@
+#!/bin/bash
+if [[ ! -f .env ]]; then
+    printf "No .env file\n"
+    exit 0
+fi
+
+# Load up .env
+set -o allexport
+[[ -f .env ]] && source .env
+set +o allexport
+
+docker exec ${COMPOSE_PROJECT_NAME}-php /bin/bash -c "php bin/cli $*"

@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# Load up .env
+set -o allexport
+[[ -f .env ]] && source .env
+set +o allexport
+
+if [[ "$(nc localhost $APP_PORT < /dev/null; echo $?;)" == 0 ]]
+then
+    echo "Port: $APP_PORT is busy"
+    read lower_port upper_port < /proc/sys/net/ipv4/ip_local_port_range
+    while :; do
+        for (( APP_PORT = lower_port ; APP_PORT <= upper_port ; APP_PORT++ )); do
+            if [[ "$(nc localhost $APP_PORT < /dev/null; echo $?;)" != 0 ]]; then
+                break 2;
+            fi
+        done
+    done
+fi
+
+echo "Server will be started at port: $APP_PORT"
+
+count=`ls -1 .docker/log/*.log 2>/dev/null | wc -l`
+if [[ ${count} != 0 ]]; then
+    echo "Delete old log files"
+    rm -f ./.docker/log/*.log
+fi
+
+echo "Starting docker"
+docker-compose up -d
+
+echo "Web: http://$SITE_URL"
+
+
+if [[ -v MYSQL_HOST ]]; then
+    MYSQL_IP="$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$COMPOSE_PROJECT_NAME"-mysql)"
+    echo "MySQL IP: $MYSQL_IP"
+    echo "External MySQL connection: localhost:$EXT_PORT_MYSQL"
+fi
+
+if [[ -v RABBIRMQ_USER ]]; then
+    RABBIT_MQ_IP="$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$COMPOSE_PROJECT_NAME"-rabbitmq)"
+    echo "RabbitMQ web: http://$RABBIT_MQ_IP:15672"
+    echo "RabbitMQ Login: $RABBIRMQ_USER"
+    echo "RabbitMQ Password: $RABBIRMQ_PASSWORD"
+fi
+
+if [[ -v HAS_SUPERIVSOR ]]; then
+    echo "Starting supervisor"
+    docker exec -it "$COMPOSE_PROJECT_NAME"-php /usr/bin/supervisord -c /tmp/supervisord.conf
+    echo "Supervisor Web: http://root:root@$APP_HOST:$EXT_PORT_PHP"
+fi
+
+if [[ -v EXT_PORT_MAILHOG ]]; then
+    MAIL_HOG_IP="$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$COMPOSE_PROJECT_NAME"-mailhog)"
+    echo "MailHog web: http://$MAIL_HOG_IP:8025"
+fi
