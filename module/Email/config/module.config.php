@@ -6,7 +6,7 @@ return [
         'templates' => include 'templates.config.php',
         'email-view' => include 'email-view.config.php',
 
-        'sendFrom' => 'testrunner@devellar.com',
+        'sendFrom' => 'testrunner@runner.com',
         'sendFromName' => 'TestRunner',
         'path' => __DIR__ . '/../../../data/mail/',
     ],

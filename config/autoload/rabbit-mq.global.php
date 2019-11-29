@@ -2,9 +2,9 @@
 
 return [
     'rabbitMq' => [
-        'host' => '192.168.216.12',
+        'host' => 'rabbitmq',
         'port' => '5672',
-        'username' => 'guest',
-        'password' => 'guest',
+        'username' => 'rabbitmq',
+        'password' => 'rabbitmq',
     ],
 ];

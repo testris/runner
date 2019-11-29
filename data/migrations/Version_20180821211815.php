@@ -23,7 +23,7 @@ class Version_20180821211815 extends AbstractVersion
 
         $this->executeQuery(
             "INSERT INTO `tr_users` (`email`, `password`, `name`) 
-                  VALUES ('max.gulturyan@devellar.com', '*832EB84CB764129D05D498ED9CA7E5CE9B8F83EB', 'max.gulturyan')"
+                  VALUES ('user.default@runner.com', '*832EB84CB764129D05D498ED9CA7E5CE9B8F83EB', 'user.default')"
         );
     }
 }

@@ -18,7 +18,7 @@ class Version_20180901120749 extends AbstractVersion
 
         $this->executeQuery(
             "INSERT INTO `tr_users` (`id`, `email`, `password`, `name`) 
-                  VALUES (1, 'test.runner@devellar.com', '', 'test.runner')"
+                  VALUES (1, 'test.runner@site.com', '', 'test.runner')"
         );
 
         $this->executeQuery("ALTER TABLE `tr_runs`

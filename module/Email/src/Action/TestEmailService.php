@@ -28,9 +28,8 @@ class TestEmailService implements ServiceInterface
      */
     public function handle($criteria, $changes)
     {
-//        die(var_dump(mail('max.gulturyan@devellar.com', 'test subject', 'test body')));
         $this->sender->send(
-            'max.gulturyan@devellar.com',
+            'user.default@runner.com',
             Template::RUN_FAILED,
             ['name' => 'Nightly build 12 Sep, 18']
         );
