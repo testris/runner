@@ -22,4 +22,17 @@ Run migrations
 ```
 
 #### Access via browser
-[http://localhost:39085](http://localhost:39085/)
+1. Add  
+``
+ 127.0.0.1 testrunner.local
+``  
+to your hosts file
+2. Run  
+``
+ composer install
+``  
+in docker container
+3. Init migrations  
+See `` Run migrations `` section above
+4. Open [http://testrunner.local:39000](http://testrunner.local:39000)
+
