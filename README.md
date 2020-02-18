@@ -31,7 +31,11 @@ to your hosts file
 ``
  composer install
 ``  
-in docker container
+in docker container.
+Connect to container  
+``
+docker exec -it tests-php bash
+``  
 3. Init migrations  
 See `` Run migrations `` section above
 4. Open [http://testrunner.local:39000](http://testrunner.local:39000)
